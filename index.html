@@ -1507,17 +1507,17 @@ function getStatusColorVar(pct) {
   return 'var(--green)';
 }
 function formatDelta(val) {
-  if (val === undefined || val === null) return '<span class="kpi-delta neutral">\u2014</span>';
+  if (val === undefined || val === null) return '<span class="kpi-delta neutral">—</span>';
   const cls = val > 0 ? 'up' : val < 0 ? 'down' : 'neutral';
-  const arrow = val > 0 ? '\u2191' : val < 0 ? '\u2193' : '\u2192';
+  const arrow = val > 0 ? '↑' : val < 0 ? '↓' : '→';
   return `<span class="kpi-delta ${cls}">${arrow} ${Math.abs(val)}</span>`;
 }
 function formatPct(val) {
-  if (val === undefined || val === null) return '\u2014';
+  if (val === undefined || val === null) return '—';
   return val.toFixed(1) + '%';
 }
 function formatNum(val) {
-  if (val === undefined || val === null) return '\u2014';
+  if (val === undefined || val === null) return '—';
   return val.toLocaleString();
 }
 function facilityTime(tz) {
@@ -2121,7 +2121,7 @@ function renderModelInfo(facilityId, metric) {
       </div>
     </div>
     <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-3);line-height:1.5;">
-      Holt-Winters Triple Exponential Smoothing. Retrained hourly on a rolling 14-day window. Confidence intervals represent \u00b11.96\u03c3 (95%).
+      Holt-Winters Triple Exponential Smoothing. Retrained hourly on a rolling 14-day window. Confidence intervals represent ±1.96σ (95%).
     </p>
   `;
 }
@@ -2224,8 +2224,8 @@ function renderAlertRules() {
   container.innerHTML = appState.alertRules.map(r => `
     <div class="alert-rule">
       <div class="alert-rule-text">
-        <strong>${r.facilityName}</strong> \u2014 ${r.metric === 'Total Census' ? 'Bed' : 'ICU'} Occ.
-        \u26a0\ufe0f ${r.warning}% / \ud83d\udd34 ${r.critical}% \u00b7 ${r.cooldown || 4}h cooldown
+        <strong>${r.facilityName}</strong> — ${r.metric === 'Total Census' ? 'Bed' : 'ICU'} Occ.
+        ⚠️ ${r.warning}% / 🔴 ${r.critical}% · ${r.cooldown || 4}h cooldown
       </div>
       <label class="toggle-switch">
         <input type="checkbox" ${r.enabled ? 'checked' : ''} onchange="toggleAlertRule(${r.id})">
@@ -2514,8 +2514,13 @@ async function init() {
   initTheme();
 
   try {
-    const resp = await fetch('./data.json');
-    DATA = await resp.json();
+    const [r1, r2, r3] = await Promise.all([
+      fetch('./data-facilities.json'),
+      fetch('./data-charts.json'),
+      fetch('./data-forecasts.json')
+    ]);
+    const [d1, d2, d3] = await Promise.all([r1.json(), r2.json(), r3.json()]);
+    DATA = { ...d1, ...d2, ...d3 };
   } catch (e) {
     document.getElementById('loadingScreen').innerHTML = '<p style="color:#f85149;">Failed to load data. Please refresh.</p>';
     return;
