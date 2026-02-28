@@ -742,11 +742,62 @@ body {
   background: var(--color-divider);
   margin: 0 var(--space-1);
 }
-.chart-container {
+.chart-wrapper {
   position: relative;
   width: 100%;
-  height: 280px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
 }
+.chart-wrapper::-webkit-scrollbar { height: 4px; }
+.chart-wrapper::-webkit-scrollbar-track { background: var(--color-surface-offset); border-radius: 2px; }
+.chart-wrapper::-webkit-scrollbar-thumb { background: var(--color-text-muted); border-radius: 2px; opacity: 0.4; }
+.chart-container {
+  position: relative;
+  height: 280px;
+  min-width: 100%;
+}
+.zoom-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.zoom-control label { white-space: nowrap; font-weight: 500; }
+.zoom-control input[type=range] {
+  flex: 1;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--color-border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+.zoom-control input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.zoom-control input[type=range]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.zoom-control span { min-width: 32px; text-align: center; font-variant-numeric: tabular-nums; }
 @media (min-width: 768px) {
   .chart-container { height: 360px; }
 }
@@ -1859,9 +1910,17 @@ function renderFacilityDetail(id) {
         <button class="metric-btn ${appState.chartRange === '7d' ? 'active' : ''}" onclick="changeRange('7d')">7d</button>
         <button class="metric-btn ${appState.chartRange === 'all' ? 'active' : ''}" onclick="changeRange('all')">All</button>
       </div>
-      <div class="chart-container">
-        <canvas id="mainChart"></canvas>
+      <div class="zoom-control">
+        <label>Zoom</label>
+        <input type="range" id="chartZoom" min="100" max="400" value="100" step="10" oninput="applyChartZoom(this.value)">
+        <span id="chartZoomLabel">1x</span>
       </div>
+      <div class="chart-wrapper" id="chartWrapper">
+        <div class="chart-container" id="chartInner">
+          <canvas id="mainChart"></canvas>
+        </div>
+      </div>
+      <p style="font-size:10px;color:var(--color-text-muted);margin-top:var(--space-1);text-align:center;">Drag to pan when zoomed in</p>
     </div>
 
     <div class="model-panel" id="modelPanel">
@@ -1888,7 +1947,28 @@ function changeMetric(metric) {
 
 function changeRange(range) {
   appState.chartRange = range;
+  // Reset zoom when changing range
+  const slider = document.getElementById('chartZoom');
+  if (slider) { slider.value = 100; }
+  applyChartZoom(100);
   renderFacilityDetail(appState.selectedFacility);
+}
+
+function applyChartZoom(val) {
+  const pct = parseInt(val);
+  const label = document.getElementById('chartZoomLabel');
+  const inner = document.getElementById('chartInner');
+  const wrapper = document.getElementById('chartWrapper');
+  if (label) label.textContent = (pct / 100).toFixed(1) + 'x';
+  if (inner) {
+    inner.style.width = pct + '%';
+    // When zoomed, scroll to end (most recent data) on first zoom-in
+    if (wrapper && pct > 100) {
+      requestAnimationFrame(() => { wrapper.scrollLeft = wrapper.scrollWidth; });
+    }
+  }
+  // Resize chart to fill new container width
+  if (activeChart) activeChart.resize();
 }
 
 function toggleModelPanel() {
