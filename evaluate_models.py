@@ -24,7 +24,7 @@ def process_metrics():
         if fac_id not in charts or metric_name not in charts[fac_id]: continue
         actual_records = charts[fac_id][metric_name]
         
-        train_points = len(actual_records)
+        train_points = 1344
         
         df_actual = pd.DataFrame(actual_records)
         df_actual.rename(columns={'t': 'timestamp', 'v': 'actual_value'}, inplace=True)
@@ -90,12 +90,18 @@ def process_metrics():
         else:
             mae, mape = 0.0, 0.0
             
+        # Calculate Exact Total Chronological Span in Days
+        start_time = df_actual['timestamp'].min()
+        end_time = df_actual['timestamp'].max()
+        train_window_days = (end_time - start_time).days
+        
         results.append({
             'metric_key': f_key,
             'mae': round(float(mae), 2),
             'mape': round(float(mape), 2),
             'trainSize': train_points,
-            'testSize': test_points
+            'testSize': test_points,
+            'trainWindowDays': train_window_days
         })
 
     # Output DataFrame summary
@@ -113,7 +119,8 @@ def process_metrics():
             'mae': row['mae'],
             'mape': row['mape'],
             'trainSize': row['trainSize'],
-            'testSize': row['testSize']
+            'testSize': row['testSize'],
+            'trainWindowDays': row['trainWindowDays']
         }
     with open('data-facilities.json', 'w', encoding='utf-8') as f:
         json.dump(fac_data, f, indent=4)
