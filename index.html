@@ -6,7 +6,7 @@
 <title>HCA Census Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
@@ -29,7 +29,7 @@ html {
 body {
   height: 100%;
   overflow: hidden;
-  font-family: var(--font-body);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   font-variant-numeric: tabular-nums lining-nums;
@@ -40,7 +40,7 @@ body {
    ============================================ */
 :root, [data-theme="light"] {
   --font-display: 'DM Sans', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
 
   --text-xs: clamp(0.6875rem, 0.65rem + 0.15vw, 0.75rem);
   --text-sm: clamp(0.75rem, 0.7rem + 0.2vw, 0.8125rem);
@@ -203,15 +203,15 @@ body {
 .app-header .logo-icon {
   width: 28px;
   height: 28px;
-  flex-shrink: 0;
-  display: inline-flex;
+  background: var(--orange);
+  border-radius: 6px;
+  display: flex;
   align-items: center;
   justify-content: center;
-}
-.app-header .logo-icon svg {
-  width: 100%;
-  height: 100%;
-  display: block;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  flex-shrink: 0;
 }
 .app-header .logo-text {
   font-family: var(--font-display);
@@ -317,49 +317,6 @@ body {
   border-radius: 0 2px 2px 0;
 }
 .sidebar-item i { width: 20px; height: 20px; flex-shrink: 0; }
-
-.sidebar-item[data-tab="overview"],
-.sidebar-item[data-tab="facilities"],
-.sidebar-item[data-tab="alerts"],
-.sidebar-item[data-tab="settings"] {
-  color: var(--orange);
-}
-.sidebar-item[data-tab="overview"]:hover,
-.sidebar-item[data-tab="facilities"]:hover,
-.sidebar-item[data-tab="alerts"]:hover,
-.sidebar-item[data-tab="settings"]:hover {
-  color: var(--orange-dark);
-}
-.sidebar-item[data-tab="overview"].active,
-.sidebar-item[data-tab="facilities"].active,
-.sidebar-item[data-tab="alerts"].active,
-.sidebar-item[data-tab="settings"].active {
-  color: var(--orange-dark);
-}
-.sidebar-item[data-tab="overview"].active::before,
-.sidebar-item[data-tab="facilities"].active::before,
-.sidebar-item[data-tab="alerts"].active::before,
-.sidebar-item[data-tab="settings"].active::before {
-  background: var(--orange);
-}
-.bottom-nav-item[data-tab="overview"],
-.bottom-nav-item[data-tab="facilities"],
-.bottom-nav-item[data-tab="alerts"],
-.bottom-nav-item[data-tab="settings"] {
-  color: var(--orange);
-}
-.bottom-nav-item[data-tab="overview"].active,
-.bottom-nav-item[data-tab="facilities"].active,
-.bottom-nav-item[data-tab="alerts"].active,
-.bottom-nav-item[data-tab="settings"].active {
-  color: var(--orange-dark);
-}
-.bottom-nav-item[data-tab="overview"].active::before,
-.bottom-nav-item[data-tab="facilities"].active::before,
-.bottom-nav-item[data-tab="alerts"].active::before,
-.bottom-nav-item[data-tab="settings"].active::before {
-  background: var(--orange);
-}
 
 /* Main content */
 .main-content {
@@ -473,18 +430,18 @@ body {
 .kpi-card:hover { box-shadow: var(--shadow-md); }
 .kpi-label {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--navy);
+  color: var(--color-text-muted);
   margin-bottom: var(--space-1);
   white-space: nowrap;
 }
 .kpi-value {
   font-family: var(--font-display);
   font-size: var(--text-xl);
-  font-weight: 800;
-  color: var(--orange);
+  font-weight: 700;
+  color: var(--color-text);
   line-height: 1.2;
 }
 .kpi-delta {
@@ -492,13 +449,12 @@ body {
   align-items: center;
   gap: 2px;
   font-size: 11px;
-  font-weight: 700;
-  color: var(--orange-dark);
+  font-weight: 600;
   margin-top: 2px;
 }
-.kpi-delta.up,
-.kpi-delta.down,
-.kpi-delta.neutral { color: var(--orange-dark); }
+.kpi-delta.up { color: var(--red); }
+.kpi-delta.down { color: var(--green); }
+.kpi-delta.neutral { color: var(--color-text-faint); }
 .kpi-pct-bar {
   height: 4px;
   background: var(--color-surface-offset);
@@ -573,12 +529,12 @@ body {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: var(--text-base);
-  color: var(--navy);
+  color: var(--color-text);
   line-height: 1.3;
 }
 .facility-location {
   font-size: var(--text-xs);
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -601,7 +557,7 @@ body {
 }
 .facility-metric-label {
   font-size: 11px;
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -641,11 +597,11 @@ body {
 }
 .projected-peak {
   font-size: 11px;
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   text-align: right;
   max-width: 60%;
 }
-.projected-peak strong { color: var(--navy); }
+.projected-peak strong { color: var(--color-text); }
 
 @media (min-width: 768px) {
   .facility-grid {
@@ -676,11 +632,11 @@ body {
   cursor: pointer;
   font-size: var(--text-xs);
   font-weight: 500;
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   transition: all var(--transition);
   white-space: nowrap;
 }
-.facility-pill:hover { border-color: var(--color-primary); color: var(--navy-dark); }
+.facility-pill:hover { border-color: var(--color-primary); color: var(--color-text); }
 .facility-pill.active {
   background: var(--navy);
   color: #fff;
@@ -699,14 +655,14 @@ body {
   font-family: var(--font-display);
   font-size: var(--text-xl);
   font-weight: 700;
-  color: var(--navy);
+  color: var(--color-text);
 }
 .detail-subtitle {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   font-size: var(--text-xs);
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   margin-top: 2px;
   flex-wrap: wrap;
 }
@@ -729,7 +685,7 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--navy);
+  color: var(--color-text-muted);
 }
 .detail-kpi-value {
   font-family: var(--font-display);
@@ -739,7 +695,7 @@ body {
 }
 .detail-kpi-sub {
   font-size: 11px;
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   margin-top: 2px;
 }
 
@@ -766,10 +722,10 @@ body {
   cursor: pointer;
   font-size: 12px;
   font-weight: 500;
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   transition: all var(--transition);
 }
-.metric-btn:hover { border-color: var(--color-primary); color: var(--navy-dark); }
+.metric-btn:hover { border-color: var(--color-primary); color: var(--color-text); }
 .metric-btn.active {
   background: var(--navy);
   color: #fff;
@@ -786,11 +742,62 @@ body {
   background: var(--color-divider);
   margin: 0 var(--space-1);
 }
-.chart-container {
+.chart-wrapper {
   position: relative;
   width: 100%;
-  height: 280px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
 }
+.chart-wrapper::-webkit-scrollbar { height: 4px; }
+.chart-wrapper::-webkit-scrollbar-track { background: var(--color-surface-offset); border-radius: 2px; }
+.chart-wrapper::-webkit-scrollbar-thumb { background: var(--color-text-muted); border-radius: 2px; opacity: 0.4; }
+.chart-container {
+  position: relative;
+  height: 280px;
+  min-width: 100%;
+}
+.zoom-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.zoom-control label { white-space: nowrap; font-weight: 500; }
+.zoom-control input[type=range] {
+  flex: 1;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--color-border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+.zoom-control input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.zoom-control input[type=range]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.zoom-control span { min-width: 32px; text-align: center; font-variant-numeric: tabular-nums; }
 @media (min-width: 768px) {
   .chart-container { height: 360px; }
 }
@@ -815,7 +822,6 @@ body {
 .model-panel-header h3 {
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--navy);
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -845,7 +851,7 @@ body {
 }
 .model-stat-label {
   font-size: 11px;
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   margin-top: 2px;
 }
 
@@ -890,7 +896,6 @@ body {
   font-family: var(--font-display);
   font-size: var(--text-base);
   font-weight: 600;
-  color: var(--navy);
   margin-bottom: var(--space-4);
   display: flex;
   align-items: center;
@@ -910,7 +915,7 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   margin-bottom: var(--space-1);
 }
 .form-group select,
@@ -922,7 +927,7 @@ body {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
-  color: var(--section-blue);
+  color: var(--color-text);
   font-size: var(--text-sm);
   cursor: pointer;
   appearance: none;
@@ -934,7 +939,7 @@ body {
 .slider-value {
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--navy);
+  color: var(--color-text);
   text-align: center;
   margin-top: 2px;
 }
@@ -1013,8 +1018,8 @@ input[type="range"]::-webkit-slider-thumb {
   background: var(--color-surface-2);
   font-size: var(--text-sm);
 }
-.alert-rule-text { flex: 1; color: var(--section-blue); }
-.alert-rule-text strong { font-weight: 600; color: var(--navy); }
+.alert-rule-text { flex: 1; }
+.alert-rule-text strong { font-weight: 600; }
 .toggle-switch {
   position: relative;
   width: 40px;
@@ -1089,13 +1094,13 @@ input[type="range"]::-webkit-slider-thumb {
 .alert-title.warning { color: var(--yellow); }
 .alert-message {
   font-size: var(--text-xs);
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   margin-top: 2px;
   line-height: 1.4;
 }
 .alert-time {
   font-size: 10px;
-  color: var(--section-blue);
+  color: var(--color-text-faint);
   margin-top: 4px;
 }
 .alert-actions { flex-shrink: 0; }
@@ -1114,7 +1119,6 @@ input[type="range"]::-webkit-slider-thumb {
   font-family: var(--font-display);
   font-size: var(--text-base);
   font-weight: 600;
-  color: var(--navy);
   margin-bottom: var(--space-4);
   display: flex;
   align-items: center;
@@ -1133,11 +1137,10 @@ input[type="range"]::-webkit-slider-thumb {
 .settings-row-label {
   font-size: var(--text-sm);
   font-weight: 500;
-  color: var(--section-blue);
 }
 .settings-row-desc {
   font-size: var(--text-xs);
-  color: var(--section-blue);
+  color: var(--color-text-muted);
   margin-top: 2px;
 }
 .settings-row select {
@@ -1145,10 +1148,96 @@ input[type="range"]::-webkit-slider-thumb {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
-  color: var(--section-blue);
+  color: var(--color-text);
   font-size: var(--text-sm);
   cursor: pointer;
   min-width: 120px;
+}
+
+/* Role Editor */
+.role-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+  overflow: hidden;
+}
+.role-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  cursor: pointer;
+  gap: var(--space-2);
+}
+.role-card-head:hover { background: var(--color-surface-offset); }
+.role-card-head .role-name {
+  font-weight: 600;
+  font-size: var(--text-sm);
+  flex: 1;
+}
+.role-card-head .role-badge-sm {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+}
+.role-card-body {
+  display: none;
+  padding: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+.role-card.open .role-card-body { display: block; }
+.role-card.open .role-chevron { transform: rotate(180deg); }
+.role-chevron { transition: transform var(--transition); width: 16px; height: 16px; }
+.role-field { margin-bottom: var(--space-3); }
+.role-field-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+.role-check-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-1);
+}
+.role-check-grid label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.role-check-grid label:hover { background: var(--color-surface-offset); }
+.role-check-grid input[type=checkbox] {
+  accent-color: var(--color-primary);
+  width: 16px;
+  height: 16px;
+}
+.role-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+.role-name-input {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  width: 100%;
 }
 
 /* AI Transparency Table */
@@ -1160,9 +1249,9 @@ input[type="range"]::-webkit-slider-thumb {
 .ai-table th {
   text-align: left;
   font-weight: 600;
-  color: var(--section-blue);
   padding: var(--space-2) var(--space-3);
   background: var(--color-surface-offset);
+  color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-size: 11px;
@@ -1208,8 +1297,8 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .ai-disclosure-item:last-child { border-bottom: none; }
 .ai-disclosure-item i { width: 18px; height: 18px; color: var(--color-primary); flex-shrink: 0; margin-top: 2px; }
-.ai-disclosure-item p { font-size: var(--text-sm); color: var(--section-blue); line-height: 1.5; }
-.ai-disclosure-item p strong { color: var(--navy); }
+.ai-disclosure-item p { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.5; }
+.ai-disclosure-item p strong { color: var(--color-text); }
 
 /* Utility */
 .status-color-green { color: var(--green); }
@@ -1273,15 +1362,7 @@ input[type="range"]::-webkit-slider-thumb {
   <!-- Header -->
   <header class="app-header">
     <div class="logo">
-      <div class="logo-icon" aria-label="HCA cross logo">
-        <svg viewBox="0 0 64 64" role="img" aria-hidden="true" focusable="false">
-          <rect x="26" y="4" width="12" height="24" rx="6" fill="#E87722"/>
-          <rect x="26" y="36" width="12" height="24" rx="6" fill="#E87722"/>
-          <rect x="4" y="26" width="24" height="12" rx="6" fill="#E87722"/>
-          <rect x="36" y="26" width="24" height="12" rx="6" fill="#E87722"/>
-          <circle cx="32" cy="32" r="6" fill="white"/>
-        </svg>
-      </div>
+      <div class="logo-icon">HC</div>
       <div class="logo-text">Census Command Center</div>
     </div>
     <div class="header-meta">
@@ -1436,29 +1517,25 @@ input[type="range"]::-webkit-slider-thumb {
 
         <!-- Role & Access -->
         <div class="settings-section">
-          <h3><i data-lucide="shield"></i> Role & Access</h3>
+          <h3><i data-lucide="shield"></i> Role Management</h3>
+          
           <div class="settings-row">
             <div>
-              <div class="settings-row-label">Role</div>
-              <div class="settings-row-desc">Controls visible facilities</div>
+              <div class="settings-row-label">Active Role</div>
+              <div class="settings-row-desc">Switch between configured roles</div>
             </div>
-            <select id="settingsRole" onchange="changeRole(this.value)">
-              <option value="ceo">CEO</option>
-              <option value="division_vp">Division VP</option>
-              <option value="hospital_admin">Hospital Admin</option>
-            </select>
+            <select id="settingsActiveRole" onchange="switchActiveRole(this.value)"></select>
           </div>
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">Login Simulation</div>
-              <div class="settings-row-desc">Demo authentication</div>
+
+          <div style="border:1px solid var(--color-border);border-radius:var(--radius-lg);margin-top:var(--space-3);overflow:hidden;">
+            <div style="padding:var(--space-3) var(--space-4);background:var(--color-surface-offset);border-bottom:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;">
+              <strong style="font-size:var(--text-sm);">Configure Roles</strong>
+              <button class="btn btn-primary btn-sm" onclick="addNewRole()">+ New Role</button>
             </div>
-            <div class="login-sim">
-              <input type="text" id="loginUser" placeholder="Username" value="admin@hca.com">
-              <button class="btn btn-primary btn-sm" onclick="showToast('Signed in as ' + document.getElementById('loginUser').value)">Sign In</button>
-            </div>
+            <div id="roleConfigList" style="padding:var(--space-3) var(--space-4);"></div>
           </div>
-          <div class="settings-row" id="visibleFacilitiesRow">
+
+          <div class="settings-row" id="visibleFacilitiesRow" style="margin-top:var(--space-3);">
             <div>
               <div class="settings-row-label">Visible Facilities</div>
               <div class="settings-row-desc" id="visibleFacilitiesDesc">Showing all 10 facilities</div>
@@ -1547,7 +1624,26 @@ const appState = {
     'Division A': [],
     'Division B': [],
     'Division C': []
-  }
+  },
+  roles: {
+    'CEO': {
+      facilities: '__all__',
+      metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
+      kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
+    },
+    'Division VP': {
+      facilities: [],
+      metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
+      kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
+    },
+    'Hospital Admin': {
+      facilities: [],
+      metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
+      kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
+    }
+  },
+  activeRole: 'CEO',
+  editingRole: null
 };
 
 /* ============================================
@@ -1561,11 +1657,6 @@ function getStatusColor(pct) {
 function getStatusColorVar(pct) {
   if (pct >= 90) return 'var(--red)';
   if (pct >= 80) return 'var(--yellow)';
-  return 'var(--green)';
-}
-function getCapacityColorVar(pct) {
-  if (pct >= 80) return 'var(--red)';
-  if (pct >= 65) return 'var(--yellow)';
   return 'var(--green)';
 }
 function formatDelta(val) {
@@ -1607,14 +1698,23 @@ function facilityDateTime(ts, tz) {
 function getVisibleFacilities() {
   if (!DATA) return [];
   const allIds = Object.keys(DATA.facilities);
-  if (appState.role === 'ceo') return allIds;
-  if (appState.role === 'division_vp') {
-    const divKeys = Object.keys(appState.divisions);
-    const firstDiv = divKeys[0];
-    return appState.divisions[firstDiv] || allIds.slice(0, 4);
+  const role = appState.roles[appState.activeRole];
+  if (!role) return allIds;
+  if (role.facilities === '__all__') return allIds;
+  if (Array.isArray(role.facilities) && role.facilities.length > 0) {
+    return role.facilities.filter(id => allIds.includes(id));
   }
-  if (appState.role === 'hospital_admin') return [allIds[0]];
   return allIds;
+}
+function getVisibleMetrics() {
+  const role = appState.roles[appState.activeRole];
+  if (!role) return ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
+  return role.metrics || ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
+}
+function getVisibleKpis() {
+  const role = appState.roles[appState.activeRole];
+  if (!role) return ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges'];
+  return role.kpis || ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges'];
 }
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -1699,31 +1799,37 @@ function renderOverview() {
   const icuUtil = totalICUMax > 0 ? (totalICU / totalICUMax * 100) : 0;
 
   const kpiContainer = document.getElementById('overviewKpis');
-  kpiContainer.innerHTML = `
+  const visibleKpis = getVisibleKpis();
+  let kpiHtml = '';
+  if (visibleKpis.includes('census')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">System Census</div>
       <div class="kpi-value">${formatNum(totalCensus)}</div>
       ${formatDelta(totalDelta)}
-    </div>
+    </div>`;
+  if (visibleKpis.includes('bedUtil')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">Bed Utilization</div>
-      <div class="kpi-value" style="color:${getCapacityColorVar(bedUtil)}">${formatPct(bedUtil)}</div>
-      <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:${Math.min(bedUtil,100)}%;background:${getCapacityColorVar(bedUtil)}"></div></div>
-    </div>
+      <div class="kpi-value" style="color:${getStatusColorVar(bedUtil)}">${formatPct(bedUtil)}</div>
+      <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:${Math.min(bedUtil,100)}%;background:${getStatusColorVar(bedUtil)}"></div></div>
+    </div>`;
+  if (visibleKpis.includes('icuUtil')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">ICU Utilization</div>
-      <div class="kpi-value" style="color:${getCapacityColorVar(icuUtil)}">${formatPct(icuUtil)}</div>
-      <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:${Math.min(icuUtil,100)}%;background:${getCapacityColorVar(icuUtil)}"></div></div>
-    </div>
+      <div class="kpi-value" style="color:${getStatusColorVar(icuUtil)}">${formatPct(icuUtil)}</div>
+      <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:${Math.min(icuUtil,100)}%;background:${getStatusColorVar(icuUtil)}"></div></div>
+    </div>`;
+  if (visibleKpis.includes('admissions')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">Admissions Today</div>
       <div class="kpi-value">${formatNum(totalAdmissions)}</div>
-    </div>
+    </div>`;
+  if (visibleKpis.includes('discharges')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">Discharges Today</div>
       <div class="kpi-value">${formatNum(totalDischarges)}</div>
-    </div>
-  `;
+    </div>`;
+  kpiContainer.innerHTML = kpiHtml;
 
   // Sort by occupancy descending
   const sorted = [...facilities].sort((a, b) => computeOccPct(b) - computeOccPct(a));
@@ -1909,20 +2015,27 @@ function renderFacilityDetail(id) {
 
     <div class="chart-section">
       <div class="chart-controls">
-        <button class="metric-btn ${appState.selectedMetric === 'Total Census' ? 'active' : ''}" onclick="changeMetric('Total Census')">Census</button>
-        <button class="metric-btn ${appState.selectedMetric === 'ICU Occupancy' ? 'active' : ''}" onclick="changeMetric('ICU Occupancy')">ICU</button>
-        <button class="metric-btn ${appState.selectedMetric === 'Admissions' ? 'active' : ''}" onclick="changeMetric('Admissions')">Admissions</button>
-        <button class="metric-btn ${appState.selectedMetric === 'Discharges' ? 'active' : ''}" onclick="changeMetric('Discharges')">Discharges</button>
-        <button class="metric-btn ${appState.selectedMetric === 'Births' ? 'active' : ''}" onclick="changeMetric('Births')">Births</button>
+        ${getVisibleMetrics().map(m => {
+          const label = m === 'Total Census' ? 'Census' : m === 'ICU Occupancy' ? 'ICU' : m;
+          return `<button class="metric-btn ${appState.selectedMetric === m ? 'active' : ''}" onclick="changeMetric('${m}')">${label}</button>`;
+        }).join('')}
         <div class="chart-controls-sep"></div>
         <button class="metric-btn ${appState.chartRange === '24h' ? 'active' : ''}" onclick="changeRange('24h')">24h</button>
         <button class="metric-btn ${appState.chartRange === '3d' ? 'active' : ''}" onclick="changeRange('3d')">3d</button>
         <button class="metric-btn ${appState.chartRange === '7d' ? 'active' : ''}" onclick="changeRange('7d')">7d</button>
         <button class="metric-btn ${appState.chartRange === 'all' ? 'active' : ''}" onclick="changeRange('all')">All</button>
       </div>
-      <div class="chart-container">
-        <canvas id="mainChart"></canvas>
+      <div class="zoom-control">
+        <label>Zoom</label>
+        <input type="range" id="chartZoom" min="100" max="400" value="100" step="10" oninput="applyChartZoom(this.value)">
+        <span id="chartZoomLabel">1x</span>
       </div>
+      <div class="chart-wrapper" id="chartWrapper">
+        <div class="chart-container" id="chartInner">
+          <canvas id="mainChart"></canvas>
+        </div>
+      </div>
+      <p style="font-size:10px;color:var(--color-text-muted);margin-top:var(--space-1);text-align:center;">Drag to pan when zoomed in</p>
     </div>
 
     <div class="model-panel" id="modelPanel">
@@ -1949,7 +2062,28 @@ function changeMetric(metric) {
 
 function changeRange(range) {
   appState.chartRange = range;
+  // Reset zoom when changing range
+  const slider = document.getElementById('chartZoom');
+  if (slider) { slider.value = 100; }
+  applyChartZoom(100);
   renderFacilityDetail(appState.selectedFacility);
+}
+
+function applyChartZoom(val) {
+  const pct = parseInt(val);
+  const label = document.getElementById('chartZoomLabel');
+  const inner = document.getElementById('chartInner');
+  const wrapper = document.getElementById('chartWrapper');
+  if (label) label.textContent = (pct / 100).toFixed(1) + 'x';
+  if (inner) {
+    inner.style.width = pct + '%';
+    // When zoomed, scroll to end (most recent data) on first zoom-in
+    if (wrapper && pct > 100) {
+      requestAnimationFrame(() => { wrapper.scrollLeft = wrapper.scrollWidth; });
+    }
+  }
+  // Resize chart to fill new container width
+  if (activeChart) activeChart.resize();
 }
 
 function toggleModelPanel() {
@@ -2090,7 +2224,7 @@ function renderChart(facilityId, metric, range) {
         display: true,
         content: capacityLabel + ' (' + capacityValue + ')',
         position: 'start',
-        font: { size: 11, family: 'DM Sans' },
+        font: { size: 11, family: 'Inter' },
         color: isDark ? 'rgba(248,81,73,0.8)' : 'rgba(235,87,87,0.8)',
         backgroundColor: 'transparent'
       }
@@ -2114,8 +2248,8 @@ function renderChart(facilityId, metric, range) {
           borderWidth: 1,
           cornerRadius: 8,
           padding: 12,
-          titleFont: { family: 'DM Sans', weight: '600', size: 13 },
-          bodyFont: { family: 'DM Sans', size: 12 },
+          titleFont: { family: 'Inter', weight: '600', size: 13 },
+          bodyFont: { family: 'Inter', size: 12 },
           filter: (item) => item.dataset.label !== 'Upper CI' && item.dataset.label !== 'Lower CI',
           callbacks: {
             title: function(items) {
@@ -2142,12 +2276,12 @@ function renderChart(facilityId, metric, range) {
             }
           },
           grid: { color: gridColor },
-          ticks: { color: textColor, font: { family: 'DM Sans', size: 11 }, maxTicksLimit: 8 }
+          ticks: { color: textColor, font: { family: 'Inter', size: 11 }, maxTicksLimit: 8 }
         },
         y: {
           beginAtZero: false,
           grid: { color: gridColor },
-          ticks: { color: textColor, font: { family: 'DM Sans', size: 11 } }
+          ticks: { color: textColor, font: { family: 'Inter', size: 11 } }
         }
       }
     }
@@ -2463,12 +2597,13 @@ function snoozeAlert(id) {
 /* ============================================
    SETTINGS FUNCTIONS
    ============================================ */
-function changeRole(role) {
-  appState.role = role;
+function switchActiveRole(roleName) {
+  if (!appState.roles[roleName]) return;
+  appState.activeRole = roleName;
   const visibleIds = getVisibleFacilities();
   const desc = document.getElementById('visibleFacilitiesDesc');
-  desc.textContent = `Showing ${visibleIds.length} of ${Object.keys(DATA.facilities).length} facilities`;
-  document.getElementById('roleBadge').textContent = role === 'ceo' ? 'CEO' : role === 'division_vp' ? 'VP' : 'Admin';
+  if (desc) desc.textContent = 'Showing ' + visibleIds.length + ' of ' + Object.keys(DATA.facilities).length + ' facilities';
+  document.getElementById('roleBadge').textContent = roleName;
   renderOverview();
   renderFacilitySelector();
   renderAlertConfig();
@@ -2478,6 +2613,166 @@ function changeRole(role) {
   if (appState.currentTab === 'facilities' && appState.selectedFacility) {
     selectFacility(appState.selectedFacility);
   }
+}
+
+function addNewRole() {
+  var count = Object.keys(appState.roles).length + 1;
+  var name = 'Custom Role ' + count;
+  while (appState.roles[name]) { count++; name = 'Custom Role ' + count; }
+  var allIds = Object.keys(DATA.facilities);
+  appState.roles[name] = {
+    facilities: allIds.slice(),
+    metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
+    kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
+  };
+  renderRoleConfig();
+  populateRoleDropdown();
+}
+
+function deleteRole(name) {
+  if (Object.keys(appState.roles).length <= 1) { showToast('Must keep at least one role'); return; }
+  delete appState.roles[name];
+  if (appState.activeRole === name) {
+    appState.activeRole = Object.keys(appState.roles)[0];
+    switchActiveRole(appState.activeRole);
+  }
+  renderRoleConfig();
+  populateRoleDropdown();
+}
+
+function toggleRoleCard(name) {
+  var cards = document.querySelectorAll('.role-card');
+  cards.forEach(function(c) {
+    if (c.dataset.role === name) c.classList.toggle('open');
+    else c.classList.remove('open');
+  });
+}
+
+function saveRoleConfig(name) {
+  var role = appState.roles[name];
+  if (!role) return;
+  var card = document.querySelector('.role-card[data-role="' + name + '"]');
+  if (!card) return;
+
+  // Read name input
+  var nameInput = card.querySelector('.role-name-input');
+  var newName = nameInput ? nameInput.value.trim() : name;
+  if (newName && newName !== name) {
+    if (appState.roles[newName]) { showToast('Role name already exists'); return; }
+    appState.roles[newName] = role;
+    delete appState.roles[name];
+    if (appState.activeRole === name) appState.activeRole = newName;
+    name = newName;
+  }
+
+  // Read facilities
+  var facChecks = card.querySelectorAll('input[data-group="fac"]');
+  var selFacs = [];
+  facChecks.forEach(function(cb) { if (cb.checked) selFacs.push(cb.value); });
+  role.facilities = selFacs.length === Object.keys(DATA.facilities).length ? '__all__' : selFacs;
+
+  // Read metrics
+  var metChecks = card.querySelectorAll('input[data-group="met"]');
+  var selMets = [];
+  metChecks.forEach(function(cb) { if (cb.checked) selMets.push(cb.value); });
+  role.metrics = selMets;
+
+  // Read KPIs
+  var kpiChecks = card.querySelectorAll('input[data-group="kpi"]');
+  var selKpis = [];
+  kpiChecks.forEach(function(cb) { if (cb.checked) selKpis.push(cb.value); });
+  role.kpis = selKpis;
+
+  showToast('Role "' + name + '" saved');
+  renderRoleConfig();
+  populateRoleDropdown();
+  if (name === appState.activeRole) switchActiveRole(name);
+}
+
+function populateRoleDropdown() {
+  var dd = document.getElementById('settingsActiveRole');
+  if (!dd) return;
+  dd.innerHTML = Object.keys(appState.roles).map(function(r) {
+    return '<option value="' + r + '"' + (r === appState.activeRole ? ' selected' : '') + '>' + r + '</option>';
+  }).join('');
+}
+
+function renderRoleConfig() {
+  var container = document.getElementById('roleConfigList');
+  if (!container) return;
+  var allIds = Object.keys(DATA.facilities);
+  var allMetrics = ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
+  var allKpis = [
+    { id: 'census', label: 'Total Census' },
+    { id: 'bedUtil', label: 'Bed Utilization' },
+    { id: 'icuUtil', label: 'ICU Utilization' },
+    { id: 'admissions', label: 'Admissions' },
+    { id: 'discharges', label: 'Discharges' }
+  ];
+
+  var html = '';
+  Object.keys(appState.roles).forEach(function(roleName) {
+    var role = appState.roles[roleName];
+    var isActive = roleName === appState.activeRole;
+    var facList = role.facilities === '__all__' ? allIds : (role.facilities || []);
+
+    html += '<div class="role-card" data-role="' + roleName + '">';
+    html += '<div class="role-card-head" onclick="toggleRoleCard(\'' + roleName.replace(/'/g, "\\'") + '\')">';
+    html += '<span class="role-name">' + roleName + '</span>';
+    if (isActive) html += '<span class="role-badge-sm">Active</span>';
+    html += '<span style="font-size:var(--text-xs);color:var(--color-text-muted);">' + facList.length + ' facilities, ' + (role.metrics ? role.metrics.length : 5) + ' metrics</span>';
+    html += '<i data-lucide="chevron-down" class="role-chevron"></i>';
+    html += '</div>';
+
+    html += '<div class="role-card-body">';
+
+    // Role name edit
+    html += '<div class="role-field">';
+    html += '<div class="role-field-label">Role Name</div>';
+    html += '<input type="text" class="role-name-input" value="' + roleName + '">';
+    html += '</div>';
+
+    // Facilities checkboxes
+    html += '<div class="role-field">';
+    html += '<div class="role-field-label">Facilities</div>';
+    html += '<div class="role-check-grid">';
+    allIds.forEach(function(fid) {
+      var checked = facList.includes(fid) ? ' checked' : '';
+      html += '<label><input type="checkbox" data-group="fac" value="' + fid + '"' + checked + '> ' + DATA.facilities[fid].location + '</label>';
+    });
+    html += '</div></div>';
+
+    // Metrics checkboxes
+    html += '<div class="role-field">';
+    html += '<div class="role-field-label">Chart Metrics</div>';
+    html += '<div class="role-check-grid">';
+    allMetrics.forEach(function(m) {
+      var checked = (role.metrics || allMetrics).includes(m) ? ' checked' : '';
+      html += '<label><input type="checkbox" data-group="met" value="' + m + '"' + checked + '> ' + m + '</label>';
+    });
+    html += '</div></div>';
+
+    // KPI checkboxes
+    html += '<div class="role-field">';
+    html += '<div class="role-field-label">Overview KPI Cards</div>';
+    html += '<div class="role-check-grid">';
+    allKpis.forEach(function(k) {
+      var checked = (role.kpis || allKpis.map(function(x){return x.id;})).includes(k.id) ? ' checked' : '';
+      html += '<label><input type="checkbox" data-group="kpi" value="' + k.id + '"' + checked + '> ' + k.label + '</label>';
+    });
+    html += '</div></div>';
+
+    // Actions
+    html += '<div class="role-actions">';
+    html += '<button class="btn btn-primary btn-sm" onclick="saveRoleConfig(\'' + roleName.replace(/'/g, "\\'") + '\')">Save</button>';
+    html += '<button class="btn btn-secondary btn-sm" style="color:var(--red);" onclick="deleteRole(\'' + roleName.replace(/'/g, "\\'") + '\')">Delete</button>';
+    html += '</div>';
+
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
+  lucide.createIcons();
 }
 
 function copyShareLink() {
@@ -2594,6 +2889,14 @@ async function init() {
   appState.divisions['Division B'] = allIds.slice(4, 7);
   appState.divisions['Division C'] = allIds.slice(7);
 
+  // Set default facility assignments for built-in roles
+  if (appState.roles['Division VP'].facilities.length === 0) {
+    appState.roles['Division VP'].facilities = allIds.slice(0, 4);
+  }
+  if (appState.roles['Hospital Admin'].facilities.length === 0) {
+    appState.roles['Hospital Admin'].facilities = [allIds[0]];
+  }
+
   // Set default selected facility
   if (!appState.selectedFacility) appState.selectedFacility = allIds[0];
 
@@ -2632,6 +2935,10 @@ async function init() {
   // Switch to correct tab
   switchTab(appState.currentTab);
 
+  // Populate role dropdown & render role config
+  populateRoleDropdown();
+  renderRoleConfig();
+
   // Show app, hide loader
   document.getElementById('loadingScreen').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
@@ -2640,8 +2947,7 @@ async function init() {
   lucide.createIcons();
 
   // Role badge
-  document.getElementById('roleBadge').textContent = appState.role === 'ceo' ? 'CEO' : appState.role === 'division_vp' ? 'VP' : 'Admin';
-  document.getElementById('settingsRole').value = appState.role;
+  document.getElementById('roleBadge').textContent = appState.activeRole;
 }
 
 init();
