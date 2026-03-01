@@ -1,1847 +1,2263 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>HCA Census Command Center</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
-<style>
-/* ============================================
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>HCA Census Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* ============================================
    RESET & BASE
    ============================================ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  -webkit-text-size-adjust: none;
-  height: 100%;
-  overflow: hidden;
-}
-body {
-  height: 100%;
-  overflow: hidden;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  font-variant-numeric: tabular-nums lining-nums;
-}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* ============================================
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      -webkit-text-size-adjust: none;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    /* ============================================
    DESIGN TOKENS
    ============================================ */
-:root, [data-theme="light"] {
-  --font-display: 'DM Sans', sans-serif;
-  --font-body: 'Inter', sans-serif;
+    :root,
+    [data-theme="light"] {
+      --font-display: 'DM Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
 
-  --text-xs: clamp(0.6875rem, 0.65rem + 0.15vw, 0.75rem);
-  --text-sm: clamp(0.75rem, 0.7rem + 0.2vw, 0.8125rem);
-  --text-base: clamp(0.8125rem, 0.75rem + 0.25vw, 0.9375rem);
-  --text-lg: clamp(1rem, 0.9rem + 0.4vw, 1.25rem);
-  --text-xl: clamp(1.25rem, 1rem + 0.75vw, 1.75rem);
-  --text-2xl: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem);
+      --text-xs: clamp(0.6875rem, 0.65rem + 0.15vw, 0.75rem);
+      --text-sm: clamp(0.75rem, 0.7rem + 0.2vw, 0.8125rem);
+      --text-base: clamp(0.8125rem, 0.75rem + 0.25vw, 0.9375rem);
+      --text-lg: clamp(1rem, 0.9rem + 0.4vw, 1.25rem);
+      --text-xl: clamp(1.25rem, 1rem + 0.75vw, 1.75rem);
+      --text-2xl: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem);
 
-  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
-  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
-  --space-12: 48px; --space-16: 64px;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
 
-  /* HCA Brand Colors - Light Mode */
-  --navy: #003C71;
-  --navy-light: #0a4f8a;
-  --navy-dark: #002a50;
-  --orange: #E87722;
-  --orange-light: #f09040;
-  --orange-dark: #c56210;
+      /* HCA Brand Colors - Light Mode */
+      --navy: #003C71;
+      --navy-light: #0a4f8a;
+      --navy-dark: #002a50;
+      --orange: #E87722;
+      --orange-light: #f09040;
+      --orange-dark: #c56210;
 
-  --color-bg: #f5f6f8;
-  --color-surface: #ffffff;
-  --color-surface-2: #f9fafb;
-  --color-surface-offset: #eef0f4;
-  --color-border: #e2e5eb;
-  --color-divider: #e8eaef;
+      --color-bg: #f5f6f8;
+      --color-surface: #ffffff;
+      --color-surface-2: #f9fafb;
+      --color-surface-offset: #eef0f4;
+      --color-border: #e2e5eb;
+      --color-divider: #e8eaef;
 
-  --color-text: #1a1f2e;
-  --color-text-muted: #6b7280;
-  --color-text-faint: #9ca3af;
+      --color-text: #1a1f2e;
+      --color-text-muted: #6b7280;
+      --color-text-faint: #9ca3af;
 
-  --color-primary: #003C71;
-  --color-primary-hover: #004d91;
-  --color-accent: #E87722;
+      --color-primary: #003C71;
+      --color-primary-hover: #004d91;
+      --color-accent: #E87722;
 
-  --green: #27AE60;
-  --green-bg: #ecfdf5;
-  --green-border: #a7f3d0;
-  --yellow: #F2994A;
-  --yellow-bg: #fffbeb;
-  --yellow-border: #fde68a;
-  --red: #EB5757;
-  --red-bg: #fef2f2;
-  --red-border: #fecaca;
+      --green: #27AE60;
+      --green-bg: #ecfdf5;
+      --green-border: #a7f3d0;
+      --yellow: #F2994A;
+      --yellow-bg: #fffbeb;
+      --yellow-border: #fde68a;
+      --red: #EB5757;
+      --red-bg: #fef2f2;
+      --red-border: #fecaca;
 
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
 
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
 
-  --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
-  --sidebar-width: 240px;
-  --header-height: 56px;
-  --bottom-nav-height: 64px;
-}
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --sidebar-width: 240px;
+      --header-height: 56px;
+      --bottom-nav-height: 64px;
+    }
 
-[data-theme="dark"] {
-  --color-bg: #0d1117;
-  --color-surface: #161b22;
-  --color-surface-2: #1c222d;
-  --color-surface-offset: #21262d;
-  --color-border: #30363d;
-  --color-divider: #21262d;
+    [data-theme="dark"] {
+      --color-bg: #0d1117;
+      --color-surface: #161b22;
+      --color-surface-2: #1c222d;
+      --color-surface-offset: #21262d;
+      --color-border: #30363d;
+      --color-divider: #21262d;
 
-  --color-text: #e6edf3;
-  --color-text-muted: #8b949e;
-  --color-text-faint: #6e7681;
+      --color-text: #e6edf3;
+      --color-text-muted: #8b949e;
+      --color-text-faint: #6e7681;
 
-  --color-primary: #4a90c4;
-  --color-primary-hover: #58a6e0;
-  --color-accent: #f09040;
+      --color-primary: #4a90c4;
+      --color-primary-hover: #58a6e0;
+      --color-accent: #f09040;
 
-  --navy: #4a90c4;
-  --navy-light: #58a6e0;
-  --navy-dark: #3a7db0;
-  --orange: #f09040;
-  --orange-light: #f5a560;
+      --navy: #4a90c4;
+      --navy-light: #58a6e0;
+      --navy-dark: #3a7db0;
+      --orange: #f09040;
+      --orange-light: #f5a560;
 
-  --green: #3fb950;
-  --green-bg: rgba(63,185,80,0.1);
-  --green-border: rgba(63,185,80,0.3);
-  --yellow: #d29922;
-  --yellow-bg: rgba(210,153,34,0.1);
-  --yellow-border: rgba(210,153,34,0.3);
-  --red: #f85149;
-  --red-bg: rgba(248,81,73,0.1);
-  --red-border: rgba(248,81,73,0.3);
+      --green: #3fb950;
+      --green-bg: rgba(63, 185, 80, 0.1);
+      --green-border: rgba(63, 185, 80, 0.3);
+      --yellow: #d29922;
+      --yellow-bg: rgba(210, 153, 34, 0.1);
+      --yellow-border: rgba(210, 153, 34, 0.3);
+      --red: #f85149;
+      --red-bg: rgba(248, 81, 73, 0.1);
+      --red-border: rgba(248, 81, 73, 0.3);
 
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-  --shadow-md: 0 2px 8px rgba(0,0,0,0.4);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
-}
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --color-bg: #0d1117;
-    --color-surface: #161b22;
-    --color-surface-2: #1c222d;
-    --color-surface-offset: #21262d;
-    --color-border: #30363d;
-    --color-divider: #21262d;
-    --color-text: #e6edf3;
-    --color-text-muted: #8b949e;
-    --color-text-faint: #6e7681;
-    --color-primary: #4a90c4;
-    --color-primary-hover: #58a6e0;
-    --color-accent: #f09040;
-    --navy: #4a90c4;
-    --navy-light: #58a6e0;
-    --orange: #f09040;
-    --green: #3fb950;
-    --green-bg: rgba(63,185,80,0.1);
-    --green-border: rgba(63,185,80,0.3);
-    --yellow: #d29922;
-    --yellow-bg: rgba(210,153,34,0.1);
-    --yellow-border: rgba(210,153,34,0.3);
-    --red: #f85149;
-    --red-bg: rgba(248,81,73,0.1);
-    --red-border: rgba(248,81,73,0.3);
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-    --shadow-md: 0 2px 8px rgba(0,0,0,0.4);
-    --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
-  }
-}
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme]) {
+        --color-bg: #0d1117;
+        --color-surface: #161b22;
+        --color-surface-2: #1c222d;
+        --color-surface-offset: #21262d;
+        --color-border: #30363d;
+        --color-divider: #21262d;
+        --color-text: #e6edf3;
+        --color-text-muted: #8b949e;
+        --color-text-faint: #6e7681;
+        --color-primary: #4a90c4;
+        --color-primary-hover: #58a6e0;
+        --color-accent: #f09040;
+        --navy: #4a90c4;
+        --navy-light: #58a6e0;
+        --orange: #f09040;
+        --green: #3fb950;
+        --green-bg: rgba(63, 185, 80, 0.1);
+        --green-border: rgba(63, 185, 80, 0.3);
+        --yellow: #d29922;
+        --yellow-bg: rgba(210, 153, 34, 0.1);
+        --yellow-border: rgba(210, 153, 34, 0.3);
+        --red: #f85149;
+        --red-bg: rgba(248, 81, 73, 0.1);
+        --red-border: rgba(248, 81, 73, 0.3);
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+      }
+    }
 
-/* ============================================
+    /* ============================================
    LAYOUT
    ============================================ */
-.app {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-  background: var(--color-bg);
-  color: var(--color-text);
-}
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      background: var(--color-bg);
+      color: var(--color-text);
+    }
 
-/* Header */
-.app-header {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-3);
-  padding: var(--space-2) var(--space-4);
-  min-height: var(--header-height);
-  background: var(--navy);
-  color: #fff;
-  flex-shrink: 0;
-  z-index: 100;
-  position: relative;
-}
-.app-header .logo {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-.app-header .logo-icon {
-  width: 28px;
-  height: 28px;
-  background: var(--orange);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 13px;
-  color: #fff;
-  flex-shrink: 0;
-}
-.app-header .logo-text {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--text-base);
-  white-space: nowrap;
-  letter-spacing: -0.01em;
-}
-.app-header .logo-text span {
-  font-weight: 400;
-  opacity: 0.7;
-}
-.header-meta {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--text-xs);
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-.header-meta .last-updated {
-  opacity: 0.7;
-  white-space: nowrap;
-}
-.role-badge {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: var(--radius-sm);
-  padding: 2px 8px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-.theme-toggle {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius-sm);
-  color: #fff;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background var(--transition);
-  flex-shrink: 0;
-}
-.theme-toggle:hover { background: rgba(255,255,255,0.2); }
+    /* Header */
+    .app-header {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-3);
+      padding: var(--space-2) var(--space-4);
+      min-height: var(--header-height);
+      background: var(--navy);
+      color: #fff;
+      flex-shrink: 0;
+      z-index: 100;
+      position: relative;
+    }
 
-/* Content area */
-.app-body {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
+    .app-header .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
 
-/* Sidebar (desktop) */
-.sidebar {
-  display: none;
-  width: var(--sidebar-width);
-  background: var(--color-surface);
-  border-right: 1px solid var(--color-border);
-  flex-shrink: 0;
-  padding: var(--space-3) 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-.sidebar-nav { display: flex; flex-direction: column; gap: 2px; padding: 0 var(--space-2); }
-.sidebar-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-text-muted);
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-}
-.sidebar-item:hover { background: var(--color-surface-offset); color: var(--color-text); }
-.sidebar-item.active {
-  background: var(--color-surface-offset);
-  color: var(--color-primary);
-  font-weight: 600;
-  position: relative;
-}
-.sidebar-item.active::before {
-  content: '';
-  position: absolute;
-  left: -8px;
-  top: 6px;
-  bottom: 6px;
-  width: 3px;
-  background: var(--color-primary);
-  border-radius: 0 2px 2px 0;
-}
-.sidebar-item i { width: 20px; height: 20px; flex-shrink: 0; }
+    .app-header .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--orange);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: #fff;
+      flex-shrink: 0;
+    }
 
-/* Main content */
-.main-content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  padding: var(--space-4);
-  padding-bottom: calc(var(--bottom-nav-height) + var(--space-6));
-}
+    .app-header .logo-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--text-base);
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
 
-/* Bottom nav (mobile) */
-.bottom-nav {
-  display: flex;
-  align-items: stretch;
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
-  height: var(--bottom-nav-height);
-  flex-shrink: 0;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  z-index: 100;
-}
-.bottom-nav-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  cursor: pointer;
-  border: none;
-  background: none;
-  color: var(--color-text-faint);
-  font-size: 10px;
-  font-weight: 500;
-  transition: color var(--transition);
-  position: relative;
-  -webkit-tap-highlight-color: transparent;
-}
-.bottom-nav-item i { width: 22px; height: 22px; }
-.bottom-nav-item.active { color: var(--color-primary); }
-.bottom-nav-item.active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 25%;
-  right: 25%;
-  height: 2px;
-  background: var(--color-primary);
-  border-radius: 0 0 2px 2px;
-}
-.bottom-nav-item:active { transform: scale(0.95); }
+    .app-header .logo-text span {
+      font-weight: 400;
+      opacity: 0.7;
+    }
 
-/* Desktop breakpoint */
-@media (min-width: 768px) {
-  .sidebar { display: block; }
-  .bottom-nav { display: none; }
-  .main-content {
-    padding: var(--space-6);
-    padding-bottom: var(--space-6);
-  }
-}
+    .header-meta {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
 
-/* Tab panels */
-.tab-panel { display: none; animation: fadeIn 200ms ease-out; }
-.tab-panel.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .header-meta .last-updated {
+      opacity: 0.7;
+      white-space: nowrap;
+    }
 
-/* ============================================
+    .role-badge {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-sm);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background var(--transition);
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Content area */
+    .app-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Sidebar (desktop) */
+    .sidebar {
+      display: none;
+      width: var(--sidebar-width);
+      background: var(--color-surface);
+      border-right: 1px solid var(--color-border);
+      flex-shrink: 0;
+      padding: var(--space-3) 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 var(--space-2);
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .sidebar-item:hover {
+      background: var(--color-surface-offset);
+      color: var(--color-text);
+    }
+
+    .sidebar-item.active {
+      background: var(--color-surface-offset);
+      color: var(--color-primary);
+      font-weight: 600;
+      position: relative;
+    }
+
+    .sidebar-item.active::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      background: var(--color-primary);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .sidebar-item i {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      padding: var(--space-4);
+      padding-bottom: calc(var(--bottom-nav-height) + var(--space-6));
+    }
+
+    /* Bottom nav (mobile) */
+    .bottom-nav {
+      display: flex;
+      align-items: stretch;
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      height: var(--bottom-nav-height);
+      flex-shrink: 0;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      z-index: 100;
+    }
+
+    .bottom-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--color-text-faint);
+      font-size: 10px;
+      font-weight: 500;
+      transition: color var(--transition);
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .bottom-nav-item i {
+      width: 22px;
+      height: 22px;
+    }
+
+    .bottom-nav-item.active {
+      color: var(--color-primary);
+    }
+
+    .bottom-nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 25%;
+      right: 25%;
+      height: 2px;
+      background: var(--color-primary);
+      border-radius: 0 0 2px 2px;
+    }
+
+    .bottom-nav-item:active {
+      transform: scale(0.95);
+    }
+
+    /* Desktop breakpoint */
+    @media (min-width: 768px) {
+      .sidebar {
+        display: block;
+      }
+
+      .bottom-nav {
+        display: none;
+      }
+
+      .main-content {
+        padding: var(--space-6);
+        padding-bottom: var(--space-6);
+      }
+    }
+
+    /* Tab panels */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 200ms ease-out;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* ============================================
    LOADING STATE
    ============================================ */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100dvh;
-  background: var(--navy);
-  color: #fff;
-  gap: var(--space-4);
-}
-.loading-screen .spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(255,255,255,0.2);
-  border-top-color: var(--orange);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-screen p { font-size: var(--text-sm); opacity: 0.7; }
+    .loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100dvh;
+      background: var(--navy);
+      color: #fff;
+      gap: var(--space-4);
+    }
 
-/* ============================================
+    .loading-screen .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-screen p {
+      font-size: var(--text-sm);
+      opacity: 0.7;
+    }
+
+    /* ============================================
    OVERVIEW TAB
    ============================================ */
-.kpi-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-3);
-  padding-bottom: var(--space-2);
-}
-.kpi-row::-webkit-scrollbar { display: none; }
-.kpi-card {
-  min-width: 0;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-3) var(--space-4);
-  transition: box-shadow var(--transition);
-}
-.kpi-card:hover { box-shadow: var(--shadow-md); }
-.kpi-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-1);
-  white-space: nowrap;
-}
-.kpi-value {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  color: var(--color-text);
-  line-height: 1.2;
-}
-.kpi-delta {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 11px;
-  font-weight: 600;
-  margin-top: 2px;
-}
-.kpi-delta.up { color: var(--red); }
-.kpi-delta.down { color: var(--green); }
-.kpi-delta.neutral { color: var(--color-text-faint); }
-.kpi-pct-bar {
-  height: 4px;
-  background: var(--color-surface-offset);
-  border-radius: 2px;
-  margin-top: var(--space-2);
-  overflow: hidden;
-}
-.kpi-pct-fill {
-  height: 100%;
-  border-radius: 2px;
-  transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
-}
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-3);
+      padding-bottom: var(--space-2);
+    }
 
-@media (min-width: 480px) and (max-width: 767px) {
-  .kpi-row {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (min-width: 768px) {
-  .kpi-row {
-    grid-template-columns: repeat(5, 1fr);
-  }
-  .kpi-card { min-width: auto; }
-}
+    .kpi-row::-webkit-scrollbar {
+      display: none;
+    }
 
-/* Section headers */
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: var(--space-6) 0 var(--space-3) 0;
-}
-.section-title {
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--color-text);
-}
-.section-subtitle {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-}
+    .kpi-card {
+      min-width: 0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-3) var(--space-4);
+      transition: box-shadow var(--transition);
+    }
 
-/* Facility status cards */
-.facility-grid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-.facility-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  cursor: pointer;
-  transition: all var(--transition);
-  content-visibility: auto;
-  contain-intrinsic-size: 0 140px;
-}
-.facility-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-primary);
-}
-.facility-card:active { transform: scale(0.995); }
-.facility-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: var(--space-3);
-}
-.facility-name {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: var(--text-base);
-  color: var(--color-text);
-  line-height: 1.3;
-}
-.facility-location {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.facility-location i { width: 12px; height: 12px; }
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.status-dot.green { background: var(--green); }
-.status-dot.yellow { background: var(--yellow); }
-.status-dot.red { background: var(--red); }
+    .kpi-card:hover {
+      box-shadow: var(--shadow-md);
+    }
 
-.facility-metrics {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-2) var(--space-4);
-}
-.facility-metric-label {
-  font-size: 11px;
-  color: var(--color-text-muted);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-.facility-metric-value {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-}
-.occupancy-bar {
-  height: 6px;
-  background: var(--color-surface-offset);
-  border-radius: 3px;
-  margin-top: var(--space-3);
-  overflow: hidden;
-}
-.occupancy-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
-}
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-1);
+      white-space: nowrap;
+    }
 
-.facility-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-divider);
-}
-.sparkline-container {
-  width: 80px;
-  height: 28px;
-  flex-shrink: 0;
-}
-.projected-peak {
-  font-size: 11px;
-  color: var(--color-text-muted);
-  text-align: right;
-  max-width: 60%;
-}
-.projected-peak strong { color: var(--color-text); }
+    .kpi-value {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1.2;
+    }
 
-@media (min-width: 768px) {
-  .facility-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: var(--space-4);
-  }
-}
+    .kpi-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
 
-/* ============================================
+    .kpi-delta.up {
+      color: var(--red);
+    }
+
+    .kpi-delta.down {
+      color: var(--green);
+    }
+
+    .kpi-delta.neutral {
+      color: var(--color-text-faint);
+    }
+
+    .kpi-pct-bar {
+      height: 4px;
+      background: var(--color-surface-offset);
+      border-radius: 2px;
+      margin-top: var(--space-2);
+      overflow: hidden;
+    }
+
+    .kpi-pct-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (min-width: 480px) and (max-width: 767px) {
+      .kpi-row {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .kpi-row {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .kpi-card {
+        min-width: auto;
+      }
+    }
+
+    /* Section headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: var(--space-6) 0 var(--space-3) 0;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .section-subtitle {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    /* Facility status cards */
+    .facility-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .facility-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      cursor: pointer;
+      transition: all var(--transition);
+      content-visibility: auto;
+      contain-intrinsic-size: 0 140px;
+    }
+
+    .facility-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-primary);
+    }
+
+    .facility-card:active {
+      transform: scale(0.995);
+    }
+
+    .facility-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: var(--space-3);
+    }
+
+    .facility-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: var(--text-base);
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    .facility-location {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .facility-location i {
+      width: 12px;
+      height: 12px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.green {
+      background: var(--green);
+    }
+
+    .status-dot.yellow {
+      background: var(--yellow);
+    }
+
+    .status-dot.red {
+      background: var(--red);
+    }
+
+    .facility-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2) var(--space-4);
+    }
+
+    .facility-metric-label {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .facility-metric-value {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .occupancy-bar {
+      height: 6px;
+      background: var(--color-surface-offset);
+      border-radius: 3px;
+      margin-top: var(--space-3);
+      overflow: hidden;
+    }
+
+    .occupancy-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .facility-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--space-3);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--color-divider);
+    }
+
+    .sparkline-container {
+      width: 80px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .projected-peak {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      text-align: right;
+      max-width: 60%;
+    }
+
+    .projected-peak strong {
+      color: var(--color-text);
+    }
+
+    @media (min-width: 768px) {
+      .facility-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: var(--space-4);
+      }
+    }
+
+    /* ============================================
    FACILITIES TAB
    ============================================ */
-.facility-selector {
-  display: flex;
-  gap: var(--space-2);
-  overflow-x: auto;
-  padding-bottom: var(--space-2);
-  margin-bottom: var(--space-4);
-  scrollbar-width: none;
-}
-.facility-selector::-webkit-scrollbar { display: none; }
-.facility-pill {
-  flex: 0 0 auto;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  cursor: pointer;
-  font-size: var(--text-xs);
-  font-weight: 500;
-  color: var(--color-text-muted);
-  transition: all var(--transition);
-  white-space: nowrap;
-}
-.facility-pill:hover { border-color: var(--color-primary); color: var(--color-text); }
-.facility-pill.active {
-  background: var(--navy);
-  color: #fff;
-  border-color: var(--navy);
-}
-[data-theme="dark"] .facility-pill.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #fff;
-}
+    .facility-selector {
+      display: flex;
+      gap: var(--space-2);
+      overflow-x: auto;
+      padding-bottom: var(--space-2);
+      margin-bottom: var(--space-4);
+      scrollbar-width: none;
+    }
 
-.detail-header {
-  margin-bottom: var(--space-4);
-}
-.detail-title {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  color: var(--color-text);
-}
-.detail-subtitle {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  margin-top: 2px;
-  flex-wrap: wrap;
-}
-.detail-subtitle i { width: 14px; height: 14px; }
+    .facility-selector::-webkit-scrollbar {
+      display: none;
+    }
 
-.detail-kpis {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
-}
-.detail-kpi {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-3);
-}
-.detail-kpi-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-}
-.detail-kpi-value {
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
-  font-weight: 700;
-  margin-top: 2px;
-}
-.detail-kpi-sub {
-  font-size: 11px;
-  color: var(--color-text-muted);
-  margin-top: 2px;
-}
+    .facility-pill {
+      flex: 0 0 auto;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      cursor: pointer;
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
 
-/* Chart area */
-.chart-section {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  margin-bottom: var(--space-4);
-}
-.chart-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
-  align-items: center;
-}
-.metric-btn {
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--color-text-muted);
-  transition: all var(--transition);
-}
-.metric-btn:hover { border-color: var(--color-primary); color: var(--color-text); }
-.metric-btn.active {
-  background: var(--navy);
-  color: #fff;
-  border-color: var(--navy);
-}
-[data-theme="dark"] .metric-btn.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #fff;
-}
-.chart-controls-sep {
-  width: 1px;
-  height: 24px;
-  background: var(--color-divider);
-  margin: 0 var(--space-1);
-}
-.chart-wrapper {
-  position: relative;
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  border-radius: var(--radius-md);
-}
-.chart-wrapper::-webkit-scrollbar { height: 4px; }
-.chart-wrapper::-webkit-scrollbar-track { background: var(--color-surface-offset); border-radius: 2px; }
-.chart-wrapper::-webkit-scrollbar-thumb { background: var(--color-text-muted); border-radius: 2px; opacity: 0.4; }
-.chart-container {
-  position: relative;
-  height: 280px;
-  min-width: 100%;
-}
-.zoom-control {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) 0;
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-}
-.zoom-control label { white-space: nowrap; font-weight: 500; }
-.zoom-control input[type=range] {
-  flex: 1;
-  height: 4px;
-  -webkit-appearance: none;
-  appearance: none;
-  background: var(--color-border);
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
-}
-.zoom-control input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--navy);
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  cursor: pointer;
-}
-.zoom-control input[type=range]::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--navy);
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  cursor: pointer;
-}
-.zoom-control span { min-width: 32px; text-align: center; font-variant-numeric: tabular-nums; }
-@media (min-width: 768px) {
-  .chart-container { height: 360px; }
-}
+    .facility-pill:hover {
+      border-color: var(--color-primary);
+      color: var(--color-text);
+    }
 
-/* Model info panel */
-.model-panel {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-bottom: var(--space-4);
-}
-.model-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-3) var(--space-4);
-  cursor: pointer;
-  transition: background var(--transition);
-}
-.model-panel-header:hover { background: var(--color-surface-offset); }
-.model-panel-header h3 {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-.model-panel-header i { width: 16px; height: 16px; transition: transform var(--transition); }
-.model-panel.open .model-panel-header i.chevron { transform: rotate(180deg); }
-.model-panel-body {
-  display: none;
-  padding: 0 var(--space-4) var(--space-4);
-}
-.model-panel.open .model-panel-body { display: block; }
-.model-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: var(--space-3);
-}
-.model-stat {
-  text-align: center;
-  padding: var(--space-2);
-  background: var(--color-surface-offset);
-  border-radius: var(--radius-md);
-}
-.model-stat-value {
-  font-size: var(--text-lg);
-  font-weight: 700;
-  color: var(--color-primary);
-}
-.model-stat-label {
-  font-size: 11px;
-  color: var(--color-text-muted);
-  margin-top: 2px;
-}
+    .facility-pill.active {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
 
-/* Projected alert box */
-.projected-alert-box {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-lg);
-  font-size: var(--text-sm);
-  line-height: 1.5;
-}
-.projected-alert-box.warning {
-  background: var(--yellow-bg);
-  border: 1px solid var(--yellow-border);
-  color: var(--yellow);
-}
-.projected-alert-box.critical {
-  background: var(--red-bg);
-  border: 1px solid var(--red-border);
-  color: var(--red);
-}
-.projected-alert-box.healthy {
-  background: var(--green-bg);
-  border: 1px solid var(--green-border);
-  color: var(--green);
-}
-.projected-alert-box i { width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px; }
+    [data-theme="dark"] .facility-pill.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
 
-/* ============================================
+    .detail-header {
+      margin-bottom: var(--space-4);
+    }
+
+    .detail-title {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .detail-subtitle {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+
+    .detail-subtitle i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .detail-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .detail-kpi {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-3);
+    }
+
+    .detail-kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+    }
+
+    .detail-kpi-value {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .detail-kpi-sub {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    /* Chart area */
+    .chart-section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .chart-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+      align-items: center;
+    }
+
+    .metric-btn {
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: all var(--transition);
+    }
+
+    .metric-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-text);
+    }
+
+    .metric-btn.active {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+
+    [data-theme="dark"] .metric-btn.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
+
+    .chart-controls-sep {
+      width: 1px;
+      height: 24px;
+      background: var(--color-divider);
+      margin: 0 var(--space-1);
+    }
+
+    .chart-wrapper {
+      position: relative;
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius-md);
+    }
+
+    .chart-wrapper::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .chart-wrapper::-webkit-scrollbar-track {
+      background: var(--color-surface-offset);
+      border-radius: 2px;
+    }
+
+    .chart-wrapper::-webkit-scrollbar-thumb {
+      background: var(--color-text-muted);
+      border-radius: 2px;
+      opacity: 0.4;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 280px;
+      min-width: 100%;
+    }
+
+    .zoom-control {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) 0;
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    .zoom-control label {
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .zoom-control input[type=range] {
+      flex: 1;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--color-border);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .zoom-control input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--navy);
+      border: 2px solid #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+    .zoom-control input[type=range]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--navy);
+      border: 2px solid #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+    .zoom-control span {
+      min-width: 32px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 360px;
+      }
+    }
+
+    /* Model info panel */
+    .model-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: var(--space-4);
+    }
+
+    .model-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) var(--space-4);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .model-panel-header:hover {
+      background: var(--color-surface-offset);
+    }
+
+    .model-panel-header h3 {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .model-panel-header i {
+      width: 16px;
+      height: 16px;
+      transition: transform var(--transition);
+    }
+
+    .model-panel.open .model-panel-header i.chevron {
+      transform: rotate(180deg);
+    }
+
+    .model-panel-body {
+      display: none;
+      padding: 0 var(--space-4) var(--space-4);
+    }
+
+    .model-panel.open .model-panel-body {
+      display: block;
+    }
+
+    .model-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: var(--space-3);
+    }
+
+    .model-stat {
+      text-align: center;
+      padding: var(--space-2);
+      background: var(--color-surface-offset);
+      border-radius: var(--radius-md);
+    }
+
+    .model-stat-value {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .model-stat-label {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    /* Projected alert box */
+    .projected-alert-box {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-lg);
+      font-size: var(--text-sm);
+      line-height: 1.5;
+    }
+
+    .projected-alert-box.warning {
+      background: var(--yellow-bg);
+      border: 1px solid var(--yellow-border);
+      color: var(--yellow);
+    }
+
+    .projected-alert-box.critical {
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      color: var(--red);
+    }
+
+    .projected-alert-box.healthy {
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      color: var(--green);
+    }
+
+    .projected-alert-box i {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ============================================
    ALERTS TAB
    ============================================ */
-.alerts-config {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  margin-bottom: var(--space-4);
-}
-.alerts-config h3 {
-  font-family: var(--font-display);
-  font-size: var(--text-base);
-  font-weight: 600;
-  margin-bottom: var(--space-4);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-.alert-form {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-3);
-}
-@media (min-width: 768px) {
-  .alert-form { grid-template-columns: 1fr 1fr 1fr 1fr auto auto; align-items: end; }
-}
-.form-group label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-1);
-}
-.form-group select,
-.form-group input[type="range"] {
-  width: 100%;
-}
-.form-group select {
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: var(--text-sm);
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding-right: 30px;
-}
-.slider-value {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--color-text);
-  text-align: center;
-  margin-top: 2px;
-}
-input[type="range"] {
-  -webkit-appearance: none;
-  height: 6px;
-  background: var(--color-surface-offset);
-  border-radius: 3px;
-  outline: none;
-}
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  background: var(--navy);
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid var(--color-surface);
-  box-shadow: var(--shadow-sm);
-}
-[data-theme="dark"] input[type="range"]::-webkit-slider-thumb {
-  background: var(--color-primary);
-}
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  font-size: var(--text-sm);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition);
-  white-space: nowrap;
-  min-height: 36px;
-}
-.btn:active { transform: scale(0.97); }
-.btn-primary {
-  background: var(--navy);
-  color: #fff;
-  border-color: var(--navy);
-}
-.btn-primary:hover { background: var(--navy-light); }
-[data-theme="dark"] .btn-primary {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-}
-.btn-secondary {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border-color: var(--color-border);
-}
-.btn-secondary:hover { background: var(--color-surface-offset); }
-.btn-sm { padding: 4px 10px; font-size: 12px; min-height: 28px; }
-.btn-icon {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border-radius: var(--radius-sm);
-}
+    .alerts-config {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
 
-/* Alert rules list */
-.alert-rules {
-  margin-top: var(--space-4);
-}
-.alert-rule {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--space-2);
-  background: var(--color-surface-2);
-  font-size: var(--text-sm);
-}
-.alert-rule-text { flex: 1; }
-.alert-rule-text strong { font-weight: 600; }
-.toggle-switch {
-  position: relative;
-  width: 40px;
-  height: 22px;
-  flex-shrink: 0;
-}
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
-.toggle-slider {
-  position: absolute;
-  inset: 0;
-  background: var(--color-surface-offset);
-  border-radius: 11px;
-  cursor: pointer;
-  transition: background var(--transition);
-  border: 1px solid var(--color-border);
-}
-.toggle-slider::before {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  left: 2px;
-  top: 2px;
-  background: #fff;
-  border-radius: 50%;
-  transition: transform var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-.toggle-switch input:checked + .toggle-slider {
-  background: var(--green);
-  border-color: var(--green);
-}
-.toggle-switch input:checked + .toggle-slider::before {
-  transform: translateX(18px);
-}
+    .alerts-config h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: 600;
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
 
-/* Active alerts feed */
-.alerts-feed {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-.alert-item {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  transition: opacity var(--transition);
-}
-.alert-item.snoozed { opacity: 0.4; }
-.alert-item .alert-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.alert-icon.critical { background: var(--red-bg); color: var(--red); }
-.alert-icon.warning { background: var(--yellow-bg); color: var(--yellow); }
-.alert-icon i { width: 16px; height: 16px; }
-.alert-body { flex: 1; min-width: 0; }
-.alert-title {
-  font-size: var(--text-sm);
-  font-weight: 600;
-}
-.alert-title.critical { color: var(--red); }
-.alert-title.warning { color: var(--yellow); }
-.alert-message {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  margin-top: 2px;
-  line-height: 1.4;
-}
-.alert-time {
-  font-size: 10px;
-  color: var(--color-text-faint);
-  margin-top: 4px;
-}
-.alert-actions { flex-shrink: 0; }
+    .alert-form {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
 
-/* ============================================
+    @media (min-width: 768px) {
+      .alert-form {
+        grid-template-columns: 1fr 1fr 1fr 1fr auto auto;
+        align-items: end;
+      }
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-1);
+    }
+
+    .form-group select,
+    .form-group input[type="range"] {
+      width: 100%;
+    }
+
+    .form-group select {
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-size: var(--text-sm);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+    }
+
+    .slider-value {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-text);
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      height: 6px;
+      background: var(--color-surface-offset);
+      border-radius: 3px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--navy);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid var(--color-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    [data-theme="dark"] input[type="range"]::-webkit-slider-thumb {
+      background: var(--color-primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+      min-height: 36px;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+
+    .btn-primary:hover {
+      background: var(--navy-light);
+    }
+
+    [data-theme="dark"] .btn-primary {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    .btn-secondary {
+      background: var(--color-surface);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-surface-offset);
+    }
+
+    .btn-sm {
+      padding: 4px 10px;
+      font-size: 12px;
+      min-height: 28px;
+    }
+
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Alert rules list */
+    .alert-rules {
+      margin-top: var(--space-4);
+    }
+
+    .alert-rule {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-2);
+      background: var(--color-surface-2);
+      font-size: var(--text-sm);
+    }
+
+    .alert-rule-text {
+      flex: 1;
+    }
+
+    .alert-rule-text strong {
+      font-weight: 600;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--color-surface-offset);
+      border-radius: 11px;
+      cursor: pointer;
+      transition: background var(--transition);
+      border: 1px solid var(--color-border);
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 2px;
+      top: 2px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toggle-switch input:checked+.toggle-slider {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .toggle-switch input:checked+.toggle-slider::before {
+      transform: translateX(18px);
+    }
+
+    /* Active alerts feed */
+    .alerts-feed {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .alert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-lg);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      transition: opacity var(--transition);
+    }
+
+    .alert-item.snoozed {
+      opacity: 0.4;
+    }
+
+    .alert-item .alert-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .alert-icon.critical {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .alert-icon.warning {
+      background: var(--yellow-bg);
+      color: var(--yellow);
+    }
+
+    .alert-icon i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .alert-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .alert-title {
+      font-size: var(--text-sm);
+      font-weight: 600;
+    }
+
+    .alert-title.critical {
+      color: var(--red);
+    }
+
+    .alert-title.warning {
+      color: var(--yellow);
+    }
+
+    .alert-message {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .alert-time {
+      font-size: 10px;
+      color: var(--color-text-faint);
+      margin-top: 4px;
+    }
+
+    .alert-actions {
+      flex-shrink: 0;
+    }
+
+    /* ============================================
    SETTINGS TAB
    ============================================ */
-.settings-section {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  margin-bottom: var(--space-4);
-}
-.settings-section h3 {
-  font-family: var(--font-display);
-  font-size: var(--text-base);
-  font-weight: 600;
-  margin-bottom: var(--space-4);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-.settings-section h3 i { width: 18px; height: 18px; }
-.settings-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--color-divider);
-  gap: var(--space-3);
-}
-.settings-row:last-child { border-bottom: none; }
-.settings-row-label {
-  font-size: var(--text-sm);
-  font-weight: 500;
-}
-.settings-row-desc {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  margin-top: 2px;
-}
-.settings-row select {
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: var(--text-sm);
-  cursor: pointer;
-  min-width: 120px;
-}
+    .settings-section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
 
-/* Role Editor */
-.role-card {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--space-3);
-  overflow: hidden;
-}
-.role-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-2) var(--space-3);
-  background: var(--color-surface);
-  cursor: pointer;
-  gap: var(--space-2);
-}
-.role-card-head:hover { background: var(--color-surface-offset); }
-.role-card-head .role-name {
-  font-weight: 600;
-  font-size: var(--text-sm);
-  flex: 1;
-}
-.role-card-head .role-badge-sm {
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: var(--color-primary);
-  color: #fff;
-  font-weight: 600;
-}
-.role-card-body {
-  display: none;
-  padding: var(--space-3);
-  border-top: 1px solid var(--color-border);
-  background: var(--color-bg);
-}
-.role-card.open .role-card-body { display: block; }
-.role-card.open .role-chevron { transform: rotate(180deg); }
-.role-chevron { transition: transform var(--transition); width: 16px; height: 16px; }
-.role-field { margin-bottom: var(--space-3); }
-.role-field-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-1);
-}
-.role-check-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-1);
-}
-.role-check-grid label {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  font-size: var(--text-sm);
-  padding: var(--space-1);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-.role-check-grid label:hover { background: var(--color-surface-offset); }
-.role-check-grid input[type=checkbox] {
-  accent-color: var(--color-primary);
-  width: 16px;
-  height: 16px;
-}
-.role-actions {
-  display: flex;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--color-border);
-}
-.role-name-input {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  padding: var(--space-1) var(--space-2);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface);
-  color: var(--color-text);
-  width: 100%;
-}
+    .settings-section h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: 600;
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
 
-/* AI Transparency Table */
-.ai-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--text-xs);
-}
-.ai-table th {
-  text-align: left;
-  font-weight: 600;
-  padding: var(--space-2) var(--space-3);
-  background: var(--color-surface-offset);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 11px;
-}
-.ai-table td {
-  padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--color-divider);
-}
+    .settings-section h3 i {
+      width: 18px;
+      height: 18px;
+    }
 
-/* Login sim */
-.login-sim {
-  display: flex;
-  gap: var(--space-2);
-  align-items: end;
-  flex-wrap: wrap;
-}
-.login-sim input {
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: var(--text-sm);
-  flex: 1;
-  min-width: 140px;
-}
-.login-sim input::placeholder { color: var(--color-text-faint); }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--color-divider);
+      gap: var(--space-3);
+    }
 
-/* Export row */
-.export-row {
-  display: flex;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-}
+    .settings-row:last-child {
+      border-bottom: none;
+    }
 
-/* AI disclosure items */
-.ai-disclosure-item {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--color-divider);
-}
-.ai-disclosure-item:last-child { border-bottom: none; }
-.ai-disclosure-item i { width: 18px; height: 18px; color: var(--color-primary); flex-shrink: 0; margin-top: 2px; }
-.ai-disclosure-item p { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.5; }
-.ai-disclosure-item p strong { color: var(--color-text); }
+    .settings-row-label {
+      font-size: var(--text-sm);
+      font-weight: 500;
+    }
 
-/* Utility */
-.status-color-green { color: var(--green); }
-.status-color-yellow { color: var(--yellow); }
-.status-color-red { color: var(--red); }
-.bg-green { background: var(--green); }
-.bg-yellow { background: var(--yellow); }
-.bg-red { background: var(--red); }
+    .settings-row-desc {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+    .settings-row select {
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-size: var(--text-sm);
+      cursor: pointer;
+      min-width: 120px;
+    }
 
-/* Focus visible */
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
+    /* Role Editor */
+    .role-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-3);
+      overflow: hidden;
+    }
 
-/* Toast notification */
-.toast {
-  position: fixed;
-  bottom: calc(var(--bottom-nav-height) + var(--space-4));
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--color-text);
-  color: var(--color-bg);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-lg);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  opacity: 0;
-  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 1000;
-  pointer-events: none;
-  white-space: nowrap;
-}
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-@media (min-width: 768px) {
-  .toast { bottom: var(--space-6); }
-}
-</style>
+    .role-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-surface);
+      cursor: pointer;
+      gap: var(--space-2);
+    }
+
+    .role-card-head:hover {
+      background: var(--color-surface-offset);
+    }
+
+    .role-card-head .role-name {
+      font-weight: 600;
+      font-size: var(--text-sm);
+      flex: 1;
+    }
+
+    .role-card-head .role-badge-sm {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--color-primary);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .role-card-body {
+      display: none;
+      padding: var(--space-3);
+      border-top: 1px solid var(--color-border);
+      background: var(--color-bg);
+    }
+
+    .role-card.open .role-card-body {
+      display: block;
+    }
+
+    .role-card.open .role-chevron {
+      transform: rotate(180deg);
+    }
+
+    .role-chevron {
+      transition: transform var(--transition);
+      width: 16px;
+      height: 16px;
+    }
+
+    .role-field {
+      margin-bottom: var(--space-3);
+    }
+
+    .role-field-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-1);
+    }
+
+    .role-check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-1);
+    }
+
+    .role-check-grid label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: var(--text-sm);
+      padding: var(--space-1);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+
+    .role-check-grid label:hover {
+      background: var(--color-surface-offset);
+    }
+
+    .role-check-grid input[type=checkbox] {
+      accent-color: var(--color-primary);
+      width: 16px;
+      height: 16px;
+    }
+
+    .role-actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+      padding-top: var(--space-2);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .role-name-input {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      padding: var(--space-1) var(--space-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      background: var(--color-surface);
+      color: var(--color-text);
+      width: 100%;
+    }
+
+    /* AI Transparency Table */
+    .ai-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-xs);
+    }
+
+    .ai-table th {
+      text-align: left;
+      font-weight: 600;
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-surface-offset);
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 11px;
+    }
+
+    .ai-table td {
+      padding: var(--space-2) var(--space-3);
+      border-bottom: 1px solid var(--color-divider);
+    }
+
+    /* Login sim */
+    .login-sim {
+      display: flex;
+      gap: var(--space-2);
+      align-items: end;
+      flex-wrap: wrap;
+    }
+
+    .login-sim input {
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-size: var(--text-sm);
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .login-sim input::placeholder {
+      color: var(--color-text-faint);
+    }
+
+    /* Export row */
+    .export-row {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    /* AI disclosure items */
+    .ai-disclosure-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--color-divider);
+    }
+
+    .ai-disclosure-item:last-child {
+      border-bottom: none;
+    }
+
+    .ai-disclosure-item i {
+      width: 18px;
+      height: 18px;
+      color: var(--color-primary);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .ai-disclosure-item p {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    .ai-disclosure-item p strong {
+      color: var(--color-text);
+    }
+
+    /* Utility */
+    .status-color-green {
+      color: var(--green);
+    }
+
+    .status-color-yellow {
+      color: var(--yellow);
+    }
+
+    .status-color-red {
+      color: var(--red);
+    }
+
+    .bg-green {
+      background: var(--green);
+    }
+
+    .bg-yellow {
+      background: var(--yellow);
+    }
+
+    .bg-red {
+      background: var(--red);
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Focus visible */
+    :focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: calc(var(--bottom-nav-height) + var(--space-4));
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--color-text);
+      color: var(--color-bg);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-lg);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      opacity: 0;
+      transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (min-width: 768px) {
+      .toast {
+        bottom: var(--space-6);
+      }
+    }
+  </style>
 </head>
+
 <body>
-<!-- Loading screen -->
-<div class="loading-screen" id="loadingScreen">
-  <div class="spinner"></div>
-  <p>Loading census data...</p>
-</div>
+  <!-- Loading screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="spinner"></div>
+    <p>Loading census data...</p>
+  </div>
 
-<!-- App shell (hidden until data loads) -->
-<div class="app" id="app" style="display:none;">
-  <!-- Header -->
-  <header class="app-header">
-    <div class="logo">
-      <div class="logo-icon">HC</div>
-      <div class="logo-text">Census Command Center</div>
-    </div>
-    <div class="header-meta">
-      <span class="last-updated" id="lastUpdated"></span>
-      <span class="role-badge" id="roleBadge">CEO</span>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-        <i data-lucide="moon" style="width:16px;height:16px;"></i>
-      </button>
-    </div>
-  </header>
-
-  <div class="app-body">
-    <!-- Sidebar (desktop) -->
-    <nav class="sidebar" aria-label="Main navigation">
-      <div class="sidebar-nav">
-        <button class="sidebar-item active" data-tab="overview" onclick="switchTab('overview')">
-          <i data-lucide="layout-dashboard"></i>
-          Overview
-        </button>
-        <button class="sidebar-item" data-tab="facilities" onclick="switchTab('facilities')">
-          <i data-lucide="building-2"></i>
-          Facilities
-        </button>
-        <button class="sidebar-item" data-tab="alerts" onclick="switchTab('alerts')">
-          <i data-lucide="bell"></i>
-          Alerts
-        </button>
-        <button class="sidebar-item" data-tab="settings" onclick="switchTab('settings')">
-          <i data-lucide="settings"></i>
-          Settings
+  <!-- App shell (hidden until data loads) -->
+  <div class="app" id="app" style="display:none;">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <div class="logo-icon">HC</div>
+        <div class="logo-text">Census Command Center</div>
+      </div>
+      <div class="header-meta">
+        <span class="last-updated" id="lastUpdated"></span>
+        <span class="role-badge" id="roleBadge">CEO</span>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <i data-lucide="moon" style="width:16px;height:16px;"></i>
         </button>
       </div>
-    </nav>
+    </header>
 
-    <!-- Main scrollable content -->
-    <main class="main-content" id="mainContent">
-
-      <!-- OVERVIEW TAB -->
-      <div class="tab-panel active" id="tab-overview">
-        <div class="kpi-row" id="overviewKpis"></div>
-        <div class="section-header">
-          <div>
-            <div class="section-title">Facility Status</div>
-            <div class="section-subtitle">Sorted by occupancy — highest first</div>
-          </div>
+    <div class="app-body">
+      <!-- Sidebar (desktop) -->
+      <nav class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-nav">
+          <button class="sidebar-item active" data-tab="overview" onclick="switchTab('overview')">
+            <i data-lucide="layout-dashboard"></i>
+            Overview
+          </button>
+          <button class="sidebar-item" data-tab="facilities" onclick="switchTab('facilities')">
+            <i data-lucide="building-2"></i>
+            Facilities
+          </button>
+          <button class="sidebar-item" data-tab="alerts" onclick="switchTab('alerts')">
+            <i data-lucide="bell"></i>
+            Alerts
+          </button>
+          <button class="sidebar-item" data-tab="settings" onclick="switchTab('settings')">
+            <i data-lucide="settings"></i>
+            Settings
+          </button>
         </div>
-        <div class="facility-grid" id="facilityGrid"></div>
-      </div>
+      </nav>
 
-      <!-- FACILITIES TAB -->
-      <div class="tab-panel" id="tab-facilities">
-        <div class="facility-selector" id="facilitySelector"></div>
-        <div id="facilityDetail"></div>
-      </div>
+      <!-- Main scrollable content -->
+      <main class="main-content" id="mainContent">
 
-      <!-- ALERTS TAB -->
-      <div class="tab-panel" id="tab-alerts">
-        <div class="alerts-config">
-          <h3><i data-lucide="sliders-horizontal"></i> Alert Configuration</h3>
-          <div class="alert-form" id="alertForm">
-            <div class="form-group">
-              <label>Facility</label>
-              <select id="alertFacility"></select>
+        <!-- OVERVIEW TAB -->
+        <div class="tab-panel active" id="tab-overview">
+          <div class="kpi-row" id="overviewKpis"></div>
+          <div class="section-header">
+            <div>
+              <div class="section-title">Facility Status</div>
+              <div class="section-subtitle">Sorted by occupancy — highest first</div>
             </div>
-            <div class="form-group">
-              <label>Metric</label>
-              <select id="alertMetric">
-                <option value="Total Census">Bed Occupancy</option>
-                <option value="ICU Occupancy">ICU Occupancy</option>
+          </div>
+          <div class="facility-grid" id="facilityGrid"></div>
+        </div>
+
+        <!-- FACILITIES TAB -->
+        <div class="tab-panel" id="tab-facilities">
+          <div class="facility-selector" id="facilitySelector"></div>
+          <div id="facilityDetail"></div>
+        </div>
+
+        <!-- ALERTS TAB -->
+        <div class="tab-panel" id="tab-alerts">
+          <div class="alerts-config">
+            <h3><i data-lucide="sliders-horizontal"></i> Alert Configuration</h3>
+            <div class="alert-form" id="alertForm">
+              <div class="form-group">
+                <label>Facility</label>
+                <select id="alertFacility"></select>
+              </div>
+              <div class="form-group">
+                <label>Metric</label>
+                <select id="alertMetric">
+                  <option value="Total Census">Bed Occupancy</option>
+                  <option value="ICU Occupancy">ICU Occupancy</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Warning %</label>
+                <input type="range" id="alertWarning" min="50" max="100" value="85">
+                <div class="slider-value" id="alertWarningVal">85%</div>
+              </div>
+              <div class="form-group">
+                <label>Critical %</label>
+                <input type="range" id="alertCritical" min="50" max="100" value="95">
+                <div class="slider-value" id="alertCriticalVal">95%</div>
+              </div>
+              <div class="form-group">
+                <label>Cooldown</label>
+                <select id="alertCooldown">
+                  <option value="1">1 hour</option>
+                  <option value="2">2 hours</option>
+                  <option value="4" selected>4 hours</option>
+                  <option value="8">8 hours</option>
+                </select>
+              </div>
+              <div style="display:flex;gap:var(--space-2);align-items:end;">
+                <button class="btn btn-primary" onclick="addAlertRule()">
+                  <i data-lucide="plus" style="width:16px;height:16px;"></i> Add Rule
+                </button>
+              </div>
+            </div>
+            <div class="alert-rules" id="alertRules"></div>
+          </div>
+
+          <div class="section-header">
+            <div>
+              <div class="section-title">Active Alerts</div>
+              <div class="section-subtitle">Generated from current data and forecasts</div>
+            </div>
+          </div>
+          <div class="alerts-feed" id="alertsFeed"></div>
+        </div>
+
+        <!-- SETTINGS TAB -->
+        <div class="tab-panel" id="tab-settings">
+          <!-- Dashboard Customization -->
+          <div class="settings-section">
+            <h3><i data-lucide="palette"></i> Dashboard Customization</h3>
+            <div class="settings-row">
+              <div>
+                <div class="settings-row-label">Default View</div>
+                <div class="settings-row-desc">Tab shown on launch</div>
+              </div>
+              <select id="settingsDefaultView" onchange="appState.settings.defaultView = this.value">
+                <option value="overview">Overview</option>
+                <option value="facilities">Facilities</option>
+                <option value="alerts">Alerts</option>
               </select>
             </div>
-            <div class="form-group">
-              <label>Warning %</label>
-              <input type="range" id="alertWarning" min="50" max="100" value="85">
-              <div class="slider-value" id="alertWarningVal">85%</div>
+            <div class="settings-row">
+              <div>
+                <div class="settings-row-label">Dark Mode</div>
+                <div class="settings-row-desc">Toggle dashboard theme</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="settingsDarkMode" onchange="toggleTheme()">
+                <span class="toggle-slider"></span>
+              </label>
             </div>
-            <div class="form-group">
-              <label>Critical %</label>
-              <input type="range" id="alertCritical" min="50" max="100" value="95">
-              <div class="slider-value" id="alertCriticalVal">95%</div>
-            </div>
-            <div class="form-group">
-              <label>Cooldown</label>
-              <select id="alertCooldown">
-                <option value="1">1 hour</option>
-                <option value="2">2 hours</option>
-                <option value="4" selected>4 hours</option>
-                <option value="8">8 hours</option>
-              </select>
-            </div>
-            <div style="display:flex;gap:var(--space-2);align-items:end;">
-              <button class="btn btn-primary" onclick="addAlertRule()">
-                <i data-lucide="plus" style="width:16px;height:16px;"></i> Add Rule
+          </div>
+
+          <!-- Share & Export -->
+          <div class="settings-section">
+            <h3><i data-lucide="share-2"></i> Share & Export</h3>
+            <div class="export-row">
+              <button class="btn btn-secondary" onclick="copyShareLink()">
+                <i data-lucide="link" style="width:16px;height:16px;"></i> Copy Share Link
+              </button>
+              <button class="btn btn-secondary" onclick="exportPDF()">
+                <i data-lucide="file-text" style="width:16px;height:16px;"></i> Export PDF
+              </button>
+              <button class="btn btn-secondary" onclick="exportCSV()">
+                <i data-lucide="table" style="width:16px;height:16px;"></i> Export CSV
               </button>
             </div>
           </div>
-          <div class="alert-rules" id="alertRules"></div>
-        </div>
 
-        <div class="section-header">
-          <div>
-            <div class="section-title">Active Alerts</div>
-            <div class="section-subtitle">Generated from current data and forecasts</div>
-          </div>
-        </div>
-        <div class="alerts-feed" id="alertsFeed"></div>
-      </div>
+          <!-- Role & Access -->
+          <div class="settings-section">
+            <h3><i data-lucide="shield"></i> Role Management</h3>
 
-      <!-- SETTINGS TAB -->
-      <div class="tab-panel" id="tab-settings">
-        <!-- Dashboard Customization -->
-        <div class="settings-section">
-          <h3><i data-lucide="palette"></i> Dashboard Customization</h3>
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">Default View</div>
-              <div class="settings-row-desc">Tab shown on launch</div>
+            <div class="settings-row">
+              <div>
+                <div class="settings-row-label">Active Role</div>
+                <div class="settings-row-desc">Switch between configured roles</div>
+              </div>
+              <select id="settingsActiveRole" onchange="switchActiveRole(this.value)"></select>
             </div>
-            <select id="settingsDefaultView" onchange="appState.settings.defaultView = this.value">
-              <option value="overview">Overview</option>
-              <option value="facilities">Facilities</option>
-              <option value="alerts">Alerts</option>
-            </select>
-          </div>
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">Dark Mode</div>
-              <div class="settings-row-desc">Toggle dashboard theme</div>
+
+            <div
+              style="border:1px solid var(--color-border);border-radius:var(--radius-lg);margin-top:var(--space-3);overflow:hidden;">
+              <div
+                style="padding:var(--space-3) var(--space-4);background:var(--color-surface-offset);border-bottom:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;">
+                <strong style="font-size:var(--text-sm);">Configure Roles</strong>
+                <button class="btn btn-primary btn-sm" onclick="addNewRole()">+ New Role</button>
+              </div>
+              <div id="roleConfigList" style="padding:var(--space-3) var(--space-4);"></div>
             </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="settingsDarkMode" onchange="toggleTheme()">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
 
-        <!-- Share & Export -->
-        <div class="settings-section">
-          <h3><i data-lucide="share-2"></i> Share & Export</h3>
-          <div class="export-row">
-            <button class="btn btn-secondary" onclick="copyShareLink()">
-              <i data-lucide="link" style="width:16px;height:16px;"></i> Copy Share Link
-            </button>
-            <button class="btn btn-secondary" onclick="exportPDF()">
-              <i data-lucide="file-text" style="width:16px;height:16px;"></i> Export PDF
-            </button>
-            <button class="btn btn-secondary" onclick="exportCSV()">
-              <i data-lucide="table" style="width:16px;height:16px;"></i> Export CSV
-            </button>
-          </div>
-        </div>
-
-        <!-- Role & Access -->
-        <div class="settings-section">
-          <h3><i data-lucide="shield"></i> Role Management</h3>
-          
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">Active Role</div>
-              <div class="settings-row-desc">Switch between configured roles</div>
+            <div class="settings-row" id="visibleFacilitiesRow" style="margin-top:var(--space-3);">
+              <div>
+                <div class="settings-row-label">Visible Facilities</div>
+                <div class="settings-row-desc" id="visibleFacilitiesDesc">Showing all 10 facilities</div>
+              </div>
             </div>
-            <select id="settingsActiveRole" onchange="switchActiveRole(this.value)"></select>
           </div>
 
-          <div style="border:1px solid var(--color-border);border-radius:var(--radius-lg);margin-top:var(--space-3);overflow:hidden;">
-            <div style="padding:var(--space-3) var(--space-4);background:var(--color-surface-offset);border-bottom:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;">
-              <strong style="font-size:var(--text-sm);">Configure Roles</strong>
-              <button class="btn btn-primary btn-sm" onclick="addNewRole()">+ New Role</button>
+          <!-- AI Transparency -->
+          <div class="settings-section">
+            <h3><i data-lucide="brain"></i> AI Transparency</h3>
+            <div class="ai-disclosure-item">
+              <i data-lucide="bar-chart-3"></i>
+              <p><strong>Holt-Winters Exponential Smoothing</strong> used for 72-hour census and ICU forecasts. Model is
+                retrained hourly on a rolling 14-day window.</p>
             </div>
-            <div id="roleConfigList" style="padding:var(--space-3) var(--space-4);"></div>
-          </div>
-
-          <div class="settings-row" id="visibleFacilitiesRow" style="margin-top:var(--space-3);">
-            <div>
-              <div class="settings-row-label">Visible Facilities</div>
-              <div class="settings-row-desc" id="visibleFacilitiesDesc">Showing all 10 facilities</div>
+            <div class="ai-disclosure-item">
+              <i data-lucide="cpu"></i>
+              <p><strong>AI Code Generation (Claude)</strong> used during development. All outputs reviewed and tested
+                by the engineering team.</p>
+            </div>
+            <div class="ai-disclosure-item">
+              <i data-lucide="alert-triangle"></i>
+              <p><strong>Forecasts are estimates</strong> and should not replace clinical judgment. Confidence intervals
+                widen over time to reflect increasing uncertainty.</p>
+            </div>
+            <h3 style="margin-top:var(--space-4);"><i data-lucide="activity"></i> Model Performance</h3>
+            <div style="overflow-x:auto;">
+              <table class="ai-table" id="modelPerfTable">
+                <thead>
+                  <tr>
+                    <th>Facility</th>
+                    <th>Metric</th>
+                    <th>MAE</th>
+                    <th>MAPE</th>
+                    <th>Train Size</th>
+                    <th>Test Size</th>
+                  </tr>
+                </thead>
+                <tbody id="modelPerfBody"></tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        <!-- AI Transparency -->
-        <div class="settings-section">
-          <h3><i data-lucide="brain"></i> AI Transparency</h3>
-          <div class="ai-disclosure-item">
-            <i data-lucide="bar-chart-3"></i>
-            <p><strong>Holt-Winters Exponential Smoothing</strong> used for 72-hour census and ICU forecasts. Model is retrained hourly on a rolling 14-day window.</p>
-          </div>
-          <div class="ai-disclosure-item">
-            <i data-lucide="cpu"></i>
-            <p><strong>AI Code Generation (Claude)</strong> used during development. All outputs reviewed and tested by the engineering team.</p>
-          </div>
-          <div class="ai-disclosure-item">
-            <i data-lucide="alert-triangle"></i>
-            <p><strong>Forecasts are estimates</strong> and should not replace clinical judgment. Confidence intervals widen over time to reflect increasing uncertainty.</p>
-          </div>
-          <h3 style="margin-top:var(--space-4);"><i data-lucide="activity"></i> Model Performance</h3>
-          <div style="overflow-x:auto;">
-            <table class="ai-table" id="modelPerfTable">
-              <thead>
-                <tr>
-                  <th>Facility</th>
-                  <th>Metric</th>
-                  <th>MAE</th>
-                  <th>MAPE</th>
-                  <th>Train Size</th>
-                  <th>Test Size</th>
-                </tr>
-              </thead>
-              <tbody id="modelPerfBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      </main>
+    </div>
 
-    </main>
+    <!-- Bottom nav (mobile) -->
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="bottom-nav-item active" data-tab="overview" onclick="switchTab('overview')">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Overview</span>
+      </button>
+      <button class="bottom-nav-item" data-tab="facilities" onclick="switchTab('facilities')">
+        <i data-lucide="building-2"></i>
+        <span>Facilities</span>
+      </button>
+      <button class="bottom-nav-item" data-tab="alerts" onclick="switchTab('alerts')">
+        <i data-lucide="bell"></i>
+        <span>Alerts</span>
+      </button>
+      <button class="bottom-nav-item" data-tab="settings" onclick="switchTab('settings')">
+        <i data-lucide="settings"></i>
+        <span>Settings</span>
+      </button>
+    </nav>
   </div>
 
-  <!-- Bottom nav (mobile) -->
-  <nav class="bottom-nav" aria-label="Main navigation">
-    <button class="bottom-nav-item active" data-tab="overview" onclick="switchTab('overview')">
-      <i data-lucide="layout-dashboard"></i>
-      <span>Overview</span>
-    </button>
-    <button class="bottom-nav-item" data-tab="facilities" onclick="switchTab('facilities')">
-      <i data-lucide="building-2"></i>
-      <span>Facilities</span>
-    </button>
-    <button class="bottom-nav-item" data-tab="alerts" onclick="switchTab('alerts')">
-      <i data-lucide="bell"></i>
-      <span>Alerts</span>
-    </button>
-    <button class="bottom-nav-item" data-tab="settings" onclick="switchTab('settings')">
-      <i data-lucide="settings"></i>
-      <span>Settings</span>
-    </button>
-  </nav>
-</div>
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
+  <script>
+    /* ============================================
+       GLOBAL STATE (in-memory only)
+       ============================================ */
+    let DATA = null;
+    let activeChart = null;
+    const appState = {
+      currentTab: 'overview',
+      selectedFacility: null,
+      selectedMetric: 'Total Census',
+      chartRange: '7d',
+      role: 'ceo',
+      theme: 'light',
+      alertRules: [],
+      snoozedAlerts: new Set(),
+      settings: { defaultView: 'overview' },
+      divisions: {
+        'Division A': [],
+        'Division B': [],
+        'Division C': []
+      },
+      roles: {
+        'CEO': {
+          facilities: '__all__',
+          metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
+          kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
+        },
+        'Division VP': {
+          facilities: [],
+          metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
+          kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
+        },
+        'Hospital Admin': {
+          facilities: [],
+          metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
+          kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
+        }
+      },
+      activeRole: 'CEO',
+      editingRole: null
+    };
 
-<script>
-/* ============================================
-   GLOBAL STATE (in-memory only)
-   ============================================ */
-let DATA = null;
-let activeChart = null;
-const appState = {
-  currentTab: 'overview',
-  selectedFacility: null,
-  selectedMetric: 'Total Census',
-  chartRange: '7d',
-  role: 'ceo',
-  theme: 'light',
-  alertRules: [],
-  snoozedAlerts: new Set(),
-  settings: { defaultView: 'overview' },
-  divisions: {
-    'Division A': [],
-    'Division B': [],
-    'Division C': []
-  },
-  roles: {
-    'CEO': {
-      facilities: '__all__',
-      metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
-      kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
-    },
-    'Division VP': {
-      facilities: [],
-      metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
-      kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
-    },
-    'Hospital Admin': {
-      facilities: [],
-      metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
-      kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
+    /* ============================================
+       HELPERS
+       ============================================ */
+    function getStatusColor(pct) {
+      if (pct >= 90) return 'red';
+      if (pct >= 80) return 'yellow';
+      return 'green';
     }
-  },
-  activeRole: 'CEO',
-  editingRole: null
-};
+    function getStatusColorVar(pct) {
+      if (pct >= 90) return 'var(--red)';
+      if (pct >= 80) return 'var(--yellow)';
+      return 'var(--green)';
+    }
+    function formatDelta(val) {
+      if (val === undefined || val === null) return '<span class="kpi-delta neutral">—</span>';
+      const cls = val > 0 ? 'up' : val < 0 ? 'down' : 'neutral';
+      const arrow = val > 0 ? '↑' : val < 0 ? '↓' : '→';
+      return `<span class="kpi-delta ${cls}">${arrow} ${Math.abs(val)}</span>`;
+    }
+    function formatPct(val) {
+      if (val === undefined || val === null) return '—';
+      return val.toFixed(1) + '%';
+    }
+    function formatNum(val) {
+      if (val === undefined || val === null) return '—';
+      return val.toLocaleString();
+    }
+    function facilityTime(tz) {
+      try {
+        return new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          hour: 'numeric',
+          minute: '2-digit',
+          timeZoneName: 'short'
+        }).format(new Date());
+      } catch { return ''; }
+    }
+    function facilityDateTime(ts, tz) {
+      try {
+        return new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          timeZoneName: 'short'
+        }).format(new Date(ts));
+      } catch { return ts; }
+    }
+    function getVisibleFacilities() {
+      if (!DATA) return [];
+      const allIds = Object.keys(DATA.facilities);
+      const role = appState.roles[appState.activeRole];
+      if (!role) return allIds;
+      if (role.facilities === '__all__') return allIds;
+      if (Array.isArray(role.facilities) && role.facilities.length > 0) {
+        return role.facilities.filter(id => allIds.includes(id));
+      }
+      return allIds;
+    }
+    function getVisibleMetrics() {
+      const role = appState.roles[appState.activeRole];
+      if (!role) return ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
+      return role.metrics || ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
+    }
+    function getVisibleKpis() {
+      const role = appState.roles[appState.activeRole];
+      if (!role) return ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges'];
+      return role.kpis || ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges'];
+    }
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+    function computeOccPct(fac) {
+      if (fac.occupancyPct !== undefined) return fac.occupancyPct;
+      return fac.beds > 0 ? ((fac.latestCensus / fac.beds) * 100) : 0;
+    }
+    function computeIcuPct(fac) {
+      if (fac.icuPct !== undefined) return fac.icuPct;
+      return fac.icuMax > 0 ? ((fac.latestICU / fac.icuMax) * 100) : 0;
+    }
 
-/* ============================================
-   HELPERS
-   ============================================ */
-function getStatusColor(pct) {
-  if (pct >= 90) return 'red';
-  if (pct >= 80) return 'yellow';
-  return 'green';
-}
-function getStatusColorVar(pct) {
-  if (pct >= 90) return 'var(--red)';
-  if (pct >= 80) return 'var(--yellow)';
-  return 'var(--green)';
-}
-function formatDelta(val) {
-  if (val === undefined || val === null) return '<span class="kpi-delta neutral">—</span>';
-  const cls = val > 0 ? 'up' : val < 0 ? 'down' : 'neutral';
-  const arrow = val > 0 ? '↑' : val < 0 ? '↓' : '→';
-  return `<span class="kpi-delta ${cls}">${arrow} ${Math.abs(val)}</span>`;
-}
-function formatPct(val) {
-  if (val === undefined || val === null) return '—';
-  return val.toFixed(1) + '%';
-}
-function formatNum(val) {
-  if (val === undefined || val === null) return '—';
-  return val.toLocaleString();
-}
-function facilityTime(tz) {
-  try {
-    return new Intl.DateTimeFormat('en-US', {
-      timeZone: tz,
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZoneName: 'short'
-    }).format(new Date());
-  } catch { return ''; }
-}
-function facilityDateTime(ts, tz) {
-  try {
-    return new Intl.DateTimeFormat('en-US', {
-      timeZone: tz,
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZoneName: 'short'
-    }).format(new Date(ts));
-  } catch { return ts; }
-}
-function getVisibleFacilities() {
-  if (!DATA) return [];
-  const allIds = Object.keys(DATA.facilities);
-  const role = appState.roles[appState.activeRole];
-  if (!role) return allIds;
-  if (role.facilities === '__all__') return allIds;
-  if (Array.isArray(role.facilities) && role.facilities.length > 0) {
-    return role.facilities.filter(id => allIds.includes(id));
-  }
-  return allIds;
-}
-function getVisibleMetrics() {
-  const role = appState.roles[appState.activeRole];
-  if (!role) return ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
-  return role.metrics || ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
-}
-function getVisibleKpis() {
-  const role = appState.roles[appState.activeRole];
-  if (!role) return ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges'];
-  return role.kpis || ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges'];
-}
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-function computeOccPct(fac) {
-  if (fac.occupancyPct !== undefined) return fac.occupancyPct;
-  return fac.beds > 0 ? ((fac.latestCensus / fac.beds) * 100) : 0;
-}
-function computeIcuPct(fac) {
-  if (fac.icuPct !== undefined) return fac.icuPct;
-  return fac.icuMax > 0 ? ((fac.latestICU / fac.icuMax) * 100) : 0;
-}
+    /* ============================================
+       TAB SWITCHING
+       ============================================ */
+    function switchTab(tab) {
+      appState.currentTab = tab;
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.querySelectorAll('.sidebar-item, .bottom-nav-item').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tab);
+      });
+      document.getElementById('mainContent').scrollTop = 0;
+      if (tab === 'facilities' && appState.selectedFacility) {
+        renderFacilityDetail(appState.selectedFacility);
+      }
+      if (tab === 'alerts') renderAlerts();
+    }
 
-/* ============================================
-   TAB SWITCHING
-   ============================================ */
-function switchTab(tab) {
-  appState.currentTab = tab;
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  document.querySelectorAll('.sidebar-item, .bottom-nav-item').forEach(b => {
-    b.classList.toggle('active', b.dataset.tab === tab);
-  });
-  document.getElementById('mainContent').scrollTop = 0;
-  if (tab === 'facilities' && appState.selectedFacility) {
-    renderFacilityDetail(appState.selectedFacility);
-  }
-  if (tab === 'alerts') renderAlerts();
-}
+    /* ============================================
+       THEME
+       ============================================ */
+    function initTheme() {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      appState.theme = isDark ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', appState.theme);
+      updateThemeIcon();
+    }
+    function toggleTheme() {
+      appState.theme = appState.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', appState.theme);
+      const cb = document.getElementById('settingsDarkMode');
+      if (cb) cb.checked = appState.theme === 'dark';
+      updateThemeIcon();
+      // Re-render chart if active
+      if (appState.currentTab === 'facilities' && appState.selectedFacility) {
+        renderFacilityDetail(appState.selectedFacility);
+      }
+    }
+    function updateThemeIcon() {
+      const btn = document.getElementById('themeToggle');
+      const iconName = appState.theme === 'dark' ? 'sun' : 'moon';
+      btn.innerHTML = `<i data-lucide="${iconName}" style="width:16px;height:16px;"></i>`;
+      lucide.createIcons({ nodes: [btn] });
+    }
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-/* ============================================
-   THEME
-   ============================================ */
-function initTheme() {
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  appState.theme = isDark ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', appState.theme);
-  updateThemeIcon();
-}
-function toggleTheme() {
-  appState.theme = appState.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', appState.theme);
-  const cb = document.getElementById('settingsDarkMode');
-  if (cb) cb.checked = appState.theme === 'dark';
-  updateThemeIcon();
-  // Re-render chart if active
-  if (appState.currentTab === 'facilities' && appState.selectedFacility) {
-    renderFacilityDetail(appState.selectedFacility);
-  }
-}
-function updateThemeIcon() {
-  const btn = document.getElementById('themeToggle');
-  const iconName = appState.theme === 'dark' ? 'sun' : 'moon';
-  btn.innerHTML = `<i data-lucide="${iconName}" style="width:16px;height:16px;"></i>`;
-  lucide.createIcons({ nodes: [btn] });
-}
-document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    /* ============================================
+       OVERVIEW TAB RENDERING
+       ============================================ */
+    function renderOverview() {
+      const visibleIds = getVisibleFacilities();
+      const facilities = visibleIds.map(id => DATA.facilities[id]).filter(Boolean);
 
-/* ============================================
-   OVERVIEW TAB RENDERING
-   ============================================ */
-function renderOverview() {
-  const visibleIds = getVisibleFacilities();
-  const facilities = visibleIds.map(id => DATA.facilities[id]).filter(Boolean);
+      // Compute system-wide KPIs
+      let totalCensus = 0, totalBeds = 0, totalICU = 0, totalICUMax = 0;
+      let totalAdmissions = 0, totalDischarges = 0, totalDelta = 0;
+      facilities.forEach(f => {
+        totalCensus += f.latestCensus || 0;
+        totalBeds += f.beds || 0;
+        totalICU += f.latestICU || 0;
+        totalICUMax += f.icuMax || 0;
+        totalAdmissions += f.latestAdmissions || 0;
+        totalDischarges += f.latestDischarges || 0;
+        totalDelta += f.censusDelta24h || 0;
+      });
+      const bedUtil = totalBeds > 0 ? (totalCensus / totalBeds * 100) : 0;
+      const icuUtil = totalICUMax > 0 ? (totalICU / totalICUMax * 100) : 0;
 
-  // Compute system-wide KPIs
-  let totalCensus = 0, totalBeds = 0, totalICU = 0, totalICUMax = 0;
-  let totalAdmissions = 0, totalDischarges = 0, totalDelta = 0;
-  facilities.forEach(f => {
-    totalCensus += f.latestCensus || 0;
-    totalBeds += f.beds || 0;
-    totalICU += f.latestICU || 0;
-    totalICUMax += f.icuMax || 0;
-    totalAdmissions += f.latestAdmissions || 0;
-    totalDischarges += f.latestDischarges || 0;
-    totalDelta += f.censusDelta24h || 0;
-  });
-  const bedUtil = totalBeds > 0 ? (totalCensus / totalBeds * 100) : 0;
-  const icuUtil = totalICUMax > 0 ? (totalICU / totalICUMax * 100) : 0;
-
-  const kpiContainer = document.getElementById('overviewKpis');
-  const visibleKpis = getVisibleKpis();
-  let kpiHtml = '';
-  if (visibleKpis.includes('census')) kpiHtml += `
+      const kpiContainer = document.getElementById('overviewKpis');
+      const visibleKpis = getVisibleKpis();
+      let kpiHtml = '';
+      if (visibleKpis.includes('census')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">System Census</div>
       <div class="kpi-value">${formatNum(totalCensus)}</div>
       ${formatDelta(totalDelta)}
     </div>`;
-  if (visibleKpis.includes('bedUtil')) kpiHtml += `
+      if (visibleKpis.includes('bedUtil')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">Bed Utilization</div>
       <div class="kpi-value" style="color:${getStatusColorVar(bedUtil)}">${formatPct(bedUtil)}</div>
-      <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:${Math.min(bedUtil,100)}%;background:${getStatusColorVar(bedUtil)}"></div></div>
+      <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:${Math.min(bedUtil, 100)}%;background:${getStatusColorVar(bedUtil)}"></div></div>
     </div>`;
-  if (visibleKpis.includes('icuUtil')) kpiHtml += `
+      if (visibleKpis.includes('icuUtil')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">ICU Utilization</div>
       <div class="kpi-value" style="color:${getStatusColorVar(icuUtil)}">${formatPct(icuUtil)}</div>
-      <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:${Math.min(icuUtil,100)}%;background:${getStatusColorVar(icuUtil)}"></div></div>
+      <div class="kpi-pct-bar"><div class="kpi-pct-fill" style="width:${Math.min(icuUtil, 100)}%;background:${getStatusColorVar(icuUtil)}"></div></div>
     </div>`;
-  if (visibleKpis.includes('admissions')) kpiHtml += `
+      if (visibleKpis.includes('admissions')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">Admissions Today</div>
       <div class="kpi-value">${formatNum(totalAdmissions)}</div>
     </div>`;
-  if (visibleKpis.includes('discharges')) kpiHtml += `
+      if (visibleKpis.includes('discharges')) kpiHtml += `
     <div class="kpi-card">
       <div class="kpi-label">Discharges Today</div>
       <div class="kpi-value">${formatNum(totalDischarges)}</div>
     </div>`;
-  kpiContainer.innerHTML = kpiHtml;
+      kpiContainer.innerHTML = kpiHtml;
 
-  // Sort by occupancy descending
-  const sorted = [...facilities].sort((a, b) => computeOccPct(b) - computeOccPct(a));
+      // Sort by occupancy descending
+      const sorted = [...facilities].sort((a, b) => computeOccPct(b) - computeOccPct(a));
 
-  const grid = document.getElementById('facilityGrid');
-  grid.innerHTML = sorted.map(f => {
-    const occ = computeOccPct(f);
-    const icu = computeIcuPct(f);
-    const statusColor = getStatusColor(occ);
-    const projection = getForecastProjection(f);
+      const grid = document.getElementById('facilityGrid');
+      grid.innerHTML = sorted.map(f => {
+        const occ = computeOccPct(f);
+        const icu = computeIcuPct(f);
+        const statusColor = getStatusColor(occ);
+        const projection = getForecastProjection(f);
 
-    return `
+        return `
       <div class="facility-card" onclick="navigateToFacility('${f.id}')">
         <div class="facility-card-header">
           <div>
@@ -1879,103 +2295,103 @@ function renderOverview() {
         </div>
       </div>
     `;
-  }).join('');
+      }).join('');
 
-  lucide.createIcons();
-  // Draw sparklines after DOM update
-  requestAnimationFrame(() => drawAllSparklines());
-}
-
-function getForecastProjection(fac) {
-  const fKey = fac.id + '_Total Census';
-  const forecasts = DATA.forecasts[fKey];
-  if (!forecasts || forecasts.length === 0) return '';
-  const capacity = fac.beds;
-  const threshold95 = capacity * 0.95;
-  for (const pt of forecasts) {
-    if (pt.value >= threshold95) {
-      const ts = facilityDateTime(pt.timestamp, fac.timezone);
-      return `Peak <strong>${Math.round(pt.value)}</strong> by ${ts}`;
+      lucide.createIcons();
+      // Draw sparklines after DOM update
+      requestAnimationFrame(() => drawAllSparklines());
     }
-  }
-  const maxPt = forecasts.reduce((max, pt) => pt.value > max.value ? pt : max, forecasts[0]);
-  const ts = facilityDateTime(maxPt.timestamp, fac.timezone);
-  return `Peak <strong>${Math.round(maxPt.value)}</strong> by ${ts}`;
-}
 
-function drawAllSparklines() {
-  document.querySelectorAll('.sparkline-canvas').forEach(canvas => {
-    const fId = canvas.dataset.facility;
-    const chartData = DATA.chartData[fId];
-    if (!chartData || !chartData['Total Census']) return;
-    const series = chartData['Total Census'];
-    // Last 48 points (hours)
-    const last48 = series.slice(-48);
-    if (last48.length < 2) return;
-    const values = last48.map(p => p.v);
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-    const range = max - min || 1;
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
-    ctx.beginPath();
-    values.forEach((v, i) => {
-      const x = (i / (values.length - 1)) * w;
-      const y = h - ((v - min) / range) * (h - 4) - 2;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    const occ = computeOccPct(DATA.facilities[fId]);
-    ctx.strokeStyle = occ >= 90 ? getComputedStyle(document.documentElement).getPropertyValue('--red').trim() :
-                      occ >= 80 ? getComputedStyle(document.documentElement).getPropertyValue('--yellow').trim() :
-                      getComputedStyle(document.documentElement).getPropertyValue('--green').trim();
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-  });
-}
+    function getForecastProjection(fac) {
+      const fKey = fac.id + '_Total Census';
+      const forecasts = DATA.forecasts[fKey];
+      if (!forecasts || forecasts.length === 0) return '';
+      const capacity = fac.beds;
+      const threshold95 = capacity * 0.95;
+      for (const pt of forecasts) {
+        if (pt.value >= threshold95) {
+          const ts = facilityDateTime(pt.timestamp, fac.timezone);
+          return `Peak <strong>${Math.round(pt.value)}</strong> by ${ts}`;
+        }
+      }
+      const maxPt = forecasts.reduce((max, pt) => pt.value > max.value ? pt : max, forecasts[0]);
+      const ts = facilityDateTime(maxPt.timestamp, fac.timezone);
+      return `Peak <strong>${Math.round(maxPt.value)}</strong> by ${ts}`;
+    }
 
-function navigateToFacility(id) {
-  appState.selectedFacility = id;
-  switchTab('facilities');
-  // Update pill selection
-  document.querySelectorAll('.facility-pill').forEach(p => {
-    p.classList.toggle('active', p.dataset.id === id);
-  });
-  renderFacilityDetail(id);
-}
+    function drawAllSparklines() {
+      document.querySelectorAll('.sparkline-canvas').forEach(canvas => {
+        const fId = canvas.dataset.facility;
+        const chartData = DATA.chartData[fId];
+        if (!chartData || !chartData['Total Census']) return;
+        const series = chartData['Total Census'];
+        // Last 48 points (hours)
+        const last48 = series.slice(-48);
+        if (last48.length < 2) return;
+        const values = last48.map(p => p.v);
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        const range = max - min || 1;
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        ctx.beginPath();
+        values.forEach((v, i) => {
+          const x = (i / (values.length - 1)) * w;
+          const y = h - ((v - min) / range) * (h - 4) - 2;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        const occ = computeOccPct(DATA.facilities[fId]);
+        ctx.strokeStyle = occ >= 90 ? getComputedStyle(document.documentElement).getPropertyValue('--red').trim() :
+          occ >= 80 ? getComputedStyle(document.documentElement).getPropertyValue('--yellow').trim() :
+            getComputedStyle(document.documentElement).getPropertyValue('--green').trim();
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+    }
 
-/* ============================================
-   FACILITIES TAB RENDERING
-   ============================================ */
-function renderFacilitySelector() {
-  const container = document.getElementById('facilitySelector');
-  const visibleIds = getVisibleFacilities();
-  container.innerHTML = visibleIds.map(id => {
-    const f = DATA.facilities[id];
-    return `<button class="facility-pill ${appState.selectedFacility === id ? 'active' : ''}" data-id="${id}" onclick="selectFacility('${id}')">${f.location}</button>`;
-  }).join('');
-}
+    function navigateToFacility(id) {
+      appState.selectedFacility = id;
+      switchTab('facilities');
+      // Update pill selection
+      document.querySelectorAll('.facility-pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.id === id);
+      });
+      renderFacilityDetail(id);
+    }
 
-function selectFacility(id) {
-  appState.selectedFacility = id;
-  appState.selectedMetric = 'Total Census';
-  document.querySelectorAll('.facility-pill').forEach(p => {
-    p.classList.toggle('active', p.dataset.id === id);
-  });
-  renderFacilityDetail(id);
-}
+    /* ============================================
+       FACILITIES TAB RENDERING
+       ============================================ */
+    function renderFacilitySelector() {
+      const container = document.getElementById('facilitySelector');
+      const visibleIds = getVisibleFacilities();
+      container.innerHTML = visibleIds.map(id => {
+        const f = DATA.facilities[id];
+        return `<button class="facility-pill ${appState.selectedFacility === id ? 'active' : ''}" data-id="${id}" onclick="selectFacility('${id}')">${f.location}</button>`;
+      }).join('');
+    }
 
-function renderFacilityDetail(id) {
-  const f = DATA.facilities[id];
-  if (!f) return;
-  const occ = computeOccPct(f);
-  const icu = computeIcuPct(f);
-  const localTime = facilityTime(f.timezone);
+    function selectFacility(id) {
+      appState.selectedFacility = id;
+      appState.selectedMetric = 'Total Census';
+      document.querySelectorAll('.facility-pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.id === id);
+      });
+      renderFacilityDetail(id);
+    }
 
-  const container = document.getElementById('facilityDetail');
-  container.innerHTML = `
+    function renderFacilityDetail(id) {
+      const f = DATA.facilities[id];
+      if (!f) return;
+      const occ = computeOccPct(f);
+      const icu = computeIcuPct(f);
+      const localTime = facilityTime(f.timezone);
+
+      const container = document.getElementById('facilityDetail');
+      container.innerHTML = `
     <div class="detail-header">
       <div class="detail-title">${f.location}</div>
       <div class="detail-subtitle">
@@ -2011,14 +2427,19 @@ function renderFacilityDetail(id) {
         <div class="detail-kpi-value">${f.latestBirths}</div>
         <div class="detail-kpi-sub">Today</div>
       </div>
+      <div class="detail-kpi">
+        <div class="detail-kpi-label">Patient Acuity</div>
+        <div class="detail-kpi-value">${formatPct(f.latestCensus > 0 ? (f.latestICU / f.latestCensus) * 100 : 0)}</div>
+        <div class="detail-kpi-sub">ICU / Total Occupants</div>
+      </div>
     </div>
 
     <div class="chart-section">
       <div class="chart-controls">
         ${getVisibleMetrics().map(m => {
-          const label = m === 'Total Census' ? 'Census' : m === 'ICU Occupancy' ? 'ICU' : m;
-          return `<button class="metric-btn ${appState.selectedMetric === m ? 'active' : ''}" onclick="changeMetric('${m}')">${label}</button>`;
-        }).join('')}
+        const label = m === 'Total Census' ? 'Census' : m === 'ICU Occupancy' ? 'ICU' : m;
+        return `<button class="metric-btn ${appState.selectedMetric === m ? 'active' : ''}" onclick="changeMetric('${m}')">${label}</button>`;
+      }).join('')}
         <div class="chart-controls-sep"></div>
         <button class="metric-btn ${appState.chartRange === '24h' ? 'active' : ''}" onclick="changeRange('24h')">24h</button>
         <button class="metric-btn ${appState.chartRange === '3d' ? 'active' : ''}" onclick="changeRange('3d')">3d</button>
@@ -2049,255 +2470,255 @@ function renderFacilityDetail(id) {
     <div id="projectedAlertBox"></div>
   `;
 
-  lucide.createIcons();
-  renderChart(id, appState.selectedMetric, appState.chartRange);
-  renderModelInfo(id, appState.selectedMetric);
-  renderProjectedAlert(id);
-}
-
-function changeMetric(metric) {
-  appState.selectedMetric = metric;
-  renderFacilityDetail(appState.selectedFacility);
-}
-
-function changeRange(range) {
-  appState.chartRange = range;
-  // Reset zoom when changing range
-  const slider = document.getElementById('chartZoom');
-  if (slider) { slider.value = 100; }
-  applyChartZoom(100);
-  renderFacilityDetail(appState.selectedFacility);
-}
-
-function applyChartZoom(val) {
-  const pct = parseInt(val);
-  const label = document.getElementById('chartZoomLabel');
-  const inner = document.getElementById('chartInner');
-  const wrapper = document.getElementById('chartWrapper');
-  if (label) label.textContent = (pct / 100).toFixed(1) + 'x';
-  if (inner) {
-    inner.style.width = pct + '%';
-    // When zoomed, scroll to end (most recent data) on first zoom-in
-    if (wrapper && pct > 100) {
-      requestAnimationFrame(() => { wrapper.scrollLeft = wrapper.scrollWidth; });
+      lucide.createIcons();
+      renderChart(id, appState.selectedMetric, appState.chartRange);
+      renderModelInfo(id, appState.selectedMetric);
+      renderProjectedAlert(id);
     }
-  }
-  // Resize chart to fill new container width
-  if (activeChart) activeChart.resize();
-}
 
-function toggleModelPanel() {
-  document.getElementById('modelPanel').classList.toggle('open');
-}
-
-/* ============================================
-   CHART RENDERING
-   ============================================ */
-function renderChart(facilityId, metric, range) {
-  const canvas = document.getElementById('mainChart');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
-  if (activeChart) {
-    activeChart.destroy();
-    activeChart = null;
-  }
-
-  const chartData = DATA.chartData[facilityId];
-  if (!chartData || !chartData[metric]) return;
-
-  let historicalRaw = chartData[metric];
-  const forecastKey = facilityId + '_' + metric;
-  const forecastRaw = DATA.forecasts[forecastKey] || [];
-  const fac = DATA.facilities[facilityId];
-
-  // Filter by range
-  const now = new Date(historicalRaw[historicalRaw.length - 1].t);
-  let cutoff;
-  switch (range) {
-    case '24h': cutoff = new Date(now - 24 * 3600000); break;
-    case '3d': cutoff = new Date(now - 3 * 24 * 3600000); break;
-    case '7d': cutoff = new Date(now - 7 * 24 * 3600000); break;
-    default: cutoff = new Date(0);
-  }
-  const historical = historicalRaw.filter(p => new Date(p.t) >= cutoff);
-
-  // Datasets
-  const histDataset = {
-    label: metric + ' (Actual)',
-    data: historical.map(p => ({ x: new Date(p.t), y: p.v })),
-    borderColor: 'rgb(0, 60, 113)',
-    backgroundColor: 'rgba(0, 60, 113, 0.1)',
-    borderWidth: 2,
-    pointRadius: 0,
-    pointHitRadius: 8,
-    fill: false,
-    tension: 0.3,
-    order: 1
-  };
-
-  const datasets = [histDataset];
-
-  if (forecastRaw.length > 0) {
-    // Connect forecast to last historical point
-    const lastHist = historical[historical.length - 1];
-    const forecastData = [
-      { x: new Date(lastHist.t), y: lastHist.v },
-      ...forecastRaw.map(p => ({ x: new Date(p.timestamp), y: p.value }))
-    ];
-    const upperData = [
-      { x: new Date(lastHist.t), y: lastHist.v },
-      ...forecastRaw.map(p => ({ x: new Date(p.timestamp), y: p.upper }))
-    ];
-    const lowerData = [
-      { x: new Date(lastHist.t), y: lastHist.v },
-      ...forecastRaw.map(p => ({ x: new Date(p.timestamp), y: p.lower }))
-    ];
-
-    datasets.push({
-      label: metric + ' (Forecast)',
-      data: forecastData,
-      borderColor: 'rgb(232, 119, 34)',
-      borderWidth: 2,
-      borderDash: [6, 4],
-      pointRadius: 0,
-      pointHitRadius: 8,
-      fill: false,
-      tension: 0.3,
-      order: 2
-    });
-
-    datasets.push({
-      label: 'Upper CI',
-      data: upperData,
-      borderColor: 'transparent',
-      pointRadius: 0,
-      fill: false,
-      order: 3
-    });
-
-    datasets.push({
-      label: 'Lower CI',
-      data: lowerData,
-      borderColor: 'transparent',
-      backgroundColor: 'rgba(232, 119, 34, 0.1)',
-      pointRadius: 0,
-      fill: '-1',
-      order: 4
-    });
-  }
-
-  // Determine capacity line
-  let capacityValue = null;
-  let capacityLabel = '';
-  if (metric === 'Total Census') {
-    capacityValue = fac.beds;
-    capacityLabel = 'Bed Capacity';
-  } else if (metric === 'ICU Occupancy') {
-    capacityValue = fac.icuMax;
-    capacityLabel = 'ICU Capacity';
-  }
-
-  const isDark = appState.theme === 'dark';
-  const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-  const textColor = isDark ? '#8b949e' : '#6b7280';
-
-  if (isDark) {
-    histDataset.borderColor = 'rgb(74, 144, 196)';
-    histDataset.backgroundColor = 'rgba(74, 144, 196, 0.1)';
-    if (datasets.length > 1) {
-      datasets[1].borderColor = 'rgb(240, 144, 64)';
-      if (datasets[3]) datasets[3].backgroundColor = 'rgba(240, 144, 64, 0.1)';
+    function changeMetric(metric) {
+      appState.selectedMetric = metric;
+      renderFacilityDetail(appState.selectedFacility);
     }
-  }
 
-  const annotations = {};
-  if (capacityValue) {
-    annotations.capacityLine = {
-      type: 'line',
-      yMin: capacityValue,
-      yMax: capacityValue,
-      borderColor: isDark ? 'rgba(248,81,73,0.6)' : 'rgba(235,87,87,0.6)',
-      borderWidth: 2,
-      borderDash: [8, 4],
-      label: {
-        display: true,
-        content: capacityLabel + ' (' + capacityValue + ')',
-        position: 'start',
-        font: { size: 11, family: 'Inter' },
-        color: isDark ? 'rgba(248,81,73,0.8)' : 'rgba(235,87,87,0.8)',
-        backgroundColor: 'transparent'
-      }
-    };
-  }
+    function changeRange(range) {
+      appState.chartRange = range;
+      // Reset zoom when changing range
+      const slider = document.getElementById('chartZoom');
+      if (slider) { slider.value = 100; }
+      applyChartZoom(100);
+      renderFacilityDetail(appState.selectedFacility);
+    }
 
-  activeChart = new Chart(ctx, {
-    type: 'line',
-    data: { datasets },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: isDark ? '#1c222d' : '#fff',
-          titleColor: isDark ? '#e6edf3' : '#1a1f2e',
-          bodyColor: isDark ? '#8b949e' : '#6b7280',
-          borderColor: isDark ? '#30363d' : '#e2e5eb',
-          borderWidth: 1,
-          cornerRadius: 8,
-          padding: 12,
-          titleFont: { family: 'Inter', weight: '600', size: 13 },
-          bodyFont: { family: 'Inter', size: 12 },
-          filter: (item) => item.dataset.label !== 'Upper CI' && item.dataset.label !== 'Lower CI',
-          callbacks: {
-            title: function(items) {
-              if (!items.length) return '';
-              const d = items[0].parsed.x;
-              return new Intl.DateTimeFormat('en-US', {
-                timeZone: fac.timezone,
-                month: 'short', day: 'numeric',
-                hour: 'numeric', minute: '2-digit'
-              }).format(new Date(d));
-            }
-          }
-        },
-        annotation: { annotations }
-      },
-      scales: {
-        x: {
-          type: 'time',
-          time: {
-            tooltipFormat: 'MMM d, h:mm a',
-            displayFormats: {
-              hour: 'h a',
-              day: 'MMM d'
-            }
-          },
-          grid: { color: gridColor },
-          ticks: { color: textColor, font: { family: 'Inter', size: 11 }, maxTicksLimit: 8 }
-        },
-        y: {
-          beginAtZero: false,
-          grid: { color: gridColor },
-          ticks: { color: textColor, font: { family: 'Inter', size: 11 } }
+    function applyChartZoom(val) {
+      const pct = parseInt(val);
+      const label = document.getElementById('chartZoomLabel');
+      const inner = document.getElementById('chartInner');
+      const wrapper = document.getElementById('chartWrapper');
+      if (label) label.textContent = (pct / 100).toFixed(1) + 'x';
+      if (inner) {
+        inner.style.width = pct + '%';
+        // When zoomed, scroll to end (most recent data) on first zoom-in
+        if (wrapper && pct > 100) {
+          requestAnimationFrame(() => { wrapper.scrollLeft = wrapper.scrollWidth; });
         }
       }
+      // Resize chart to fill new container width
+      if (activeChart) activeChart.resize();
     }
-  });
-}
 
-function renderModelInfo(facilityId, metric) {
-  const key = facilityId + '_' + metric;
-  const info = DATA.modelMetrics[key];
-  const body = document.getElementById('modelPanelBody');
-  if (!body) return;
-  if (!info) {
-    body.innerHTML = '<p style="font-size:var(--text-sm);color:var(--color-text-muted);">No model data available for this metric.</p>';
-    return;
-  }
-  body.innerHTML = `
+    function toggleModelPanel() {
+      document.getElementById('modelPanel').classList.toggle('open');
+    }
+
+    /* ============================================
+       CHART RENDERING
+       ============================================ */
+    function renderChart(facilityId, metric, range) {
+      const canvas = document.getElementById('mainChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      if (activeChart) {
+        activeChart.destroy();
+        activeChart = null;
+      }
+
+      const chartData = DATA.chartData[facilityId];
+      if (!chartData || !chartData[metric]) return;
+
+      let historicalRaw = chartData[metric];
+      const forecastKey = facilityId + '_' + metric;
+      const forecastRaw = DATA.forecasts[forecastKey] || [];
+      const fac = DATA.facilities[facilityId];
+
+      // Filter by range
+      const now = new Date(historicalRaw[historicalRaw.length - 1].t);
+      let cutoff;
+      switch (range) {
+        case '24h': cutoff = new Date(now - 24 * 3600000); break;
+        case '3d': cutoff = new Date(now - 3 * 24 * 3600000); break;
+        case '7d': cutoff = new Date(now - 7 * 24 * 3600000); break;
+        default: cutoff = new Date(0);
+      }
+      const historical = historicalRaw.filter(p => new Date(p.t) >= cutoff);
+
+      // Datasets
+      const histDataset = {
+        label: metric + ' (Actual)',
+        data: historical.map(p => ({ x: new Date(p.t), y: p.v })),
+        borderColor: 'rgb(0, 60, 113)',
+        backgroundColor: 'rgba(0, 60, 113, 0.1)',
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHitRadius: 8,
+        fill: false,
+        tension: 0.3,
+        order: 1
+      };
+
+      const datasets = [histDataset];
+
+      if (forecastRaw.length > 0) {
+        // Connect forecast to last historical point
+        const lastHist = historical[historical.length - 1];
+        const forecastData = [
+          { x: new Date(lastHist.t), y: lastHist.v },
+          ...forecastRaw.map(p => ({ x: new Date(p.timestamp), y: p.value }))
+        ];
+        const upperData = [
+          { x: new Date(lastHist.t), y: lastHist.v },
+          ...forecastRaw.map(p => ({ x: new Date(p.timestamp), y: p.upper }))
+        ];
+        const lowerData = [
+          { x: new Date(lastHist.t), y: lastHist.v },
+          ...forecastRaw.map(p => ({ x: new Date(p.timestamp), y: p.lower }))
+        ];
+
+        datasets.push({
+          label: metric + ' (Forecast)',
+          data: forecastData,
+          borderColor: 'rgb(232, 119, 34)',
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          pointHitRadius: 8,
+          fill: false,
+          tension: 0.3,
+          order: 2
+        });
+
+        datasets.push({
+          label: 'Upper CI',
+          data: upperData,
+          borderColor: 'transparent',
+          pointRadius: 0,
+          fill: false,
+          order: 3
+        });
+
+        datasets.push({
+          label: 'Lower CI',
+          data: lowerData,
+          borderColor: 'transparent',
+          backgroundColor: 'rgba(232, 119, 34, 0.1)',
+          pointRadius: 0,
+          fill: '-1',
+          order: 4
+        });
+      }
+
+      // Determine capacity line
+      let capacityValue = null;
+      let capacityLabel = '';
+      if (metric === 'Total Census') {
+        capacityValue = fac.beds;
+        capacityLabel = 'Bed Capacity';
+      } else if (metric === 'ICU Occupancy') {
+        capacityValue = fac.icuMax;
+        capacityLabel = 'ICU Capacity';
+      }
+
+      const isDark = appState.theme === 'dark';
+      const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+      const textColor = isDark ? '#8b949e' : '#6b7280';
+
+      if (isDark) {
+        histDataset.borderColor = 'rgb(74, 144, 196)';
+        histDataset.backgroundColor = 'rgba(74, 144, 196, 0.1)';
+        if (datasets.length > 1) {
+          datasets[1].borderColor = 'rgb(240, 144, 64)';
+          if (datasets[3]) datasets[3].backgroundColor = 'rgba(240, 144, 64, 0.1)';
+        }
+      }
+
+      const annotations = {};
+      if (capacityValue) {
+        annotations.capacityLine = {
+          type: 'line',
+          yMin: capacityValue,
+          yMax: capacityValue,
+          borderColor: isDark ? 'rgba(248,81,73,0.6)' : 'rgba(235,87,87,0.6)',
+          borderWidth: 2,
+          borderDash: [8, 4],
+          label: {
+            display: true,
+            content: capacityLabel + ' (' + capacityValue + ')',
+            position: 'start',
+            font: { size: 11, family: 'Inter' },
+            color: isDark ? 'rgba(248,81,73,0.8)' : 'rgba(235,87,87,0.8)',
+            backgroundColor: 'transparent'
+          }
+        };
+      }
+
+      activeChart = new Chart(ctx, {
+        type: 'line',
+        data: { datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: isDark ? '#1c222d' : '#fff',
+              titleColor: isDark ? '#e6edf3' : '#1a1f2e',
+              bodyColor: isDark ? '#8b949e' : '#6b7280',
+              borderColor: isDark ? '#30363d' : '#e2e5eb',
+              borderWidth: 1,
+              cornerRadius: 8,
+              padding: 12,
+              titleFont: { family: 'Inter', weight: '600', size: 13 },
+              bodyFont: { family: 'Inter', size: 12 },
+              filter: (item) => item.dataset.label !== 'Upper CI' && item.dataset.label !== 'Lower CI',
+              callbacks: {
+                title: function (items) {
+                  if (!items.length) return '';
+                  const d = items[0].parsed.x;
+                  return new Intl.DateTimeFormat('en-US', {
+                    timeZone: fac.timezone,
+                    month: 'short', day: 'numeric',
+                    hour: 'numeric', minute: '2-digit'
+                  }).format(new Date(d));
+                }
+              }
+            },
+            annotation: { annotations }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                tooltipFormat: 'MMM d, h:mm a',
+                displayFormats: {
+                  hour: 'h a',
+                  day: 'MMM d'
+                }
+              },
+              grid: { color: gridColor },
+              ticks: { color: textColor, font: { family: 'Inter', size: 11 }, maxTicksLimit: 8 }
+            },
+            y: {
+              beginAtZero: false,
+              grid: { color: gridColor },
+              ticks: { color: textColor, font: { family: 'Inter', size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    function renderModelInfo(facilityId, metric) {
+      const key = facilityId + '_' + metric;
+      const info = DATA.modelMetrics[key];
+      const body = document.getElementById('modelPanelBody');
+      if (!body) return;
+      if (!info) {
+        body.innerHTML = '<p style="font-size:var(--text-sm);color:var(--color-text-muted);">No model data available for this metric.</p>';
+        return;
+      }
+      body.innerHTML = `
     <div class="model-stats">
       <div class="model-stat">
         <div class="model-stat-value">${info.mae.toFixed(2)}</div>
@@ -2320,104 +2741,104 @@ function renderModelInfo(facilityId, metric) {
       Holt-Winters Triple Exponential Smoothing. Retrained hourly on a rolling 14-day window. Confidence intervals represent ±1.96σ (95%).
     </p>
   `;
-}
-
-function renderProjectedAlert(facilityId) {
-  const f = DATA.facilities[facilityId];
-  const box = document.getElementById('projectedAlertBox');
-  if (!box) return;
-
-  const fKey = facilityId + '_Total Census';
-  const forecasts = DATA.forecasts[fKey];
-  if (!forecasts || forecasts.length === 0) {
-    box.innerHTML = '';
-    return;
-  }
-
-  const threshold95 = f.beds * 0.95;
-  const threshold85 = f.beds * 0.85;
-  let alertPt = null;
-  let level = 'healthy';
-
-  for (const pt of forecasts) {
-    if (pt.value >= threshold95) {
-      alertPt = pt;
-      level = 'critical';
-      break;
     }
-    if (pt.value >= threshold85 && !alertPt) {
-      alertPt = pt;
-      level = 'warning';
-    }
-  }
 
-  if (level === 'healthy') {
-    box.innerHTML = `
+    function renderProjectedAlert(facilityId) {
+      const f = DATA.facilities[facilityId];
+      const box = document.getElementById('projectedAlertBox');
+      if (!box) return;
+
+      const fKey = facilityId + '_Total Census';
+      const forecasts = DATA.forecasts[fKey];
+      if (!forecasts || forecasts.length === 0) {
+        box.innerHTML = '';
+        return;
+      }
+
+      const threshold95 = f.beds * 0.95;
+      const threshold85 = f.beds * 0.85;
+      let alertPt = null;
+      let level = 'healthy';
+
+      for (const pt of forecasts) {
+        if (pt.value >= threshold95) {
+          alertPt = pt;
+          level = 'critical';
+          break;
+        }
+        if (pt.value >= threshold85 && !alertPt) {
+          alertPt = pt;
+          level = 'warning';
+        }
+      }
+
+      if (level === 'healthy') {
+        box.innerHTML = `
       <div class="projected-alert-box healthy">
         <i data-lucide="check-circle"></i>
         <span>Census projected to remain within safe levels for the next 72 hours.</span>
       </div>`;
-  } else {
-    const ts = facilityDateTime(alertPt.timestamp, f.timezone);
-    const pct = (alertPt.value / f.beds * 100).toFixed(1);
-    const icon = level === 'critical' ? 'alert-octagon' : 'alert-triangle';
-    box.innerHTML = `
+      } else {
+        const ts = facilityDateTime(alertPt.timestamp, f.timezone);
+        const pct = (alertPt.value / f.beds * 100).toFixed(1);
+        const icon = level === 'critical' ? 'alert-octagon' : 'alert-triangle';
+        box.innerHTML = `
       <div class="projected-alert-box ${level}">
         <i data-lucide="${icon}"></i>
         <span>${level === 'critical' ? 'CRITICAL' : 'WARNING'}: ${f.location} projected to reach ${pct}% bed capacity (~${Math.round(alertPt.value)} patients) by ${ts}.</span>
       </div>`;
-  }
-  lucide.createIcons();
-}
+      }
+      lucide.createIcons();
+    }
 
-/* ============================================
-   ALERTS TAB
-   ============================================ */
-function renderAlertConfig() {
-  const sel = document.getElementById('alertFacility');
-  const visibleIds = getVisibleFacilities();
-  sel.innerHTML = '<option value="all">All Facilities</option>' +
-    visibleIds.map(id => `<option value="${id}">${DATA.facilities[id].location}</option>`).join('');
-}
+    /* ============================================
+       ALERTS TAB
+       ============================================ */
+    function renderAlertConfig() {
+      const sel = document.getElementById('alertFacility');
+      const visibleIds = getVisibleFacilities();
+      sel.innerHTML = '<option value="all">All Facilities</option>' +
+        visibleIds.map(id => `<option value="${id}">${DATA.facilities[id].location}</option>`).join('');
+    }
 
-document.getElementById('alertWarning').addEventListener('input', function() {
-  document.getElementById('alertWarningVal').textContent = this.value + '%';
-});
-document.getElementById('alertCritical').addEventListener('input', function() {
-  document.getElementById('alertCriticalVal').textContent = this.value + '%';
-});
+    document.getElementById('alertWarning').addEventListener('input', function () {
+      document.getElementById('alertWarningVal').textContent = this.value + '%';
+    });
+    document.getElementById('alertCritical').addEventListener('input', function () {
+      document.getElementById('alertCriticalVal').textContent = this.value + '%';
+    });
 
-function addAlertRule() {
-  const facility = document.getElementById('alertFacility').value;
-  const metric = document.getElementById('alertMetric').value;
-  const warning = parseInt(document.getElementById('alertWarning').value);
-  const critical = parseInt(document.getElementById('alertCritical').value);
-  const cooldown = parseInt(document.getElementById('alertCooldown').value);
-  const facilityName = facility === 'all' ? 'All Facilities' : DATA.facilities[facility].location;
+    function addAlertRule() {
+      const facility = document.getElementById('alertFacility').value;
+      const metric = document.getElementById('alertMetric').value;
+      const warning = parseInt(document.getElementById('alertWarning').value);
+      const critical = parseInt(document.getElementById('alertCritical').value);
+      const cooldown = parseInt(document.getElementById('alertCooldown').value);
+      const facilityName = facility === 'all' ? 'All Facilities' : DATA.facilities[facility].location;
 
-  appState.alertRules.push({
-    id: Date.now(),
-    facility,
-    metric,
-    warning,
-    critical,
-    cooldown,
-    facilityName,
-    enabled: true
-  });
+      appState.alertRules.push({
+        id: Date.now(),
+        facility,
+        metric,
+        warning,
+        critical,
+        cooldown,
+        facilityName,
+        enabled: true
+      });
 
-  renderAlertRules();
-  renderAlerts();
-  showToast('Alert rule added');
-}
+      renderAlertRules();
+      renderAlerts();
+      showToast('Alert rule added');
+    }
 
-function renderAlertRules() {
-  const container = document.getElementById('alertRules');
-  if (appState.alertRules.length === 0) {
-    container.innerHTML = '<p style="font-size:var(--text-xs);color:var(--color-text-muted);padding:var(--space-2) 0;">No custom rules. Default: Warning at 85%, Critical at 95%.</p>';
-    return;
-  }
-  container.innerHTML = appState.alertRules.map(r => `
+    function renderAlertRules() {
+      const container = document.getElementById('alertRules');
+      if (appState.alertRules.length === 0) {
+        container.innerHTML = '<p style="font-size:var(--text-xs);color:var(--color-text-muted);padding:var(--space-2) 0;">No custom rules. Default: Warning at 85%, Critical at 95%.</p>';
+        return;
+      }
+      container.innerHTML = appState.alertRules.map(r => `
     <div class="alert-rule">
       <div class="alert-rule-text">
         <strong>${r.facilityName}</strong> — ${r.metric === 'Total Census' ? 'Bed' : 'ICU'} Occ.
@@ -2432,140 +2853,140 @@ function renderAlertRules() {
       </button>
     </div>
   `).join('');
-  lucide.createIcons();
-}
-
-function toggleAlertRule(id) {
-  const rule = appState.alertRules.find(r => r.id === id);
-  if (rule) rule.enabled = !rule.enabled;
-  renderAlerts();
-}
-
-function removeAlertRule(id) {
-  appState.alertRules = appState.alertRules.filter(r => r.id !== id);
-  renderAlertRules();
-  renderAlerts();
-  showToast('Alert rule removed');
-}
-
-function generateAlerts() {
-  const alerts = [];
-  const visibleIds = getVisibleFacilities();
-
-  visibleIds.forEach(id => {
-    const f = DATA.facilities[id];
-    const occ = computeOccPct(f);
-    const icu = computeIcuPct(f);
-
-    // Current state alerts
-    if (occ >= 95) {
-      alerts.push({
-        id: 'curr_bed_' + id,
-        level: 'critical',
-        facility: f.location,
-        message: `Bed occupancy at ${formatPct(occ)} (${f.latestCensus}/${f.beds}). Immediate attention required.`,
-        time: DATA.lastUpdated,
-        tz: f.timezone
-      });
-    } else if (occ >= 85) {
-      alerts.push({
-        id: 'curr_bed_' + id,
-        level: 'warning',
-        facility: f.location,
-        message: `Bed occupancy at ${formatPct(occ)} (${f.latestCensus}/${f.beds}). Approaching capacity.`,
-        time: DATA.lastUpdated,
-        tz: f.timezone
-      });
+      lucide.createIcons();
     }
 
-    if (icu >= 95) {
-      alerts.push({
-        id: 'curr_icu_' + id,
-        level: 'critical',
-        facility: f.location,
-        message: `ICU occupancy at ${formatPct(icu)} (${f.latestICU}/${f.icuMax}). Critical threshold exceeded.`,
-        time: DATA.lastUpdated,
-        tz: f.timezone
-      });
-    } else if (icu >= 85) {
-      alerts.push({
-        id: 'curr_icu_' + id,
-        level: 'warning',
-        facility: f.location,
-        message: `ICU occupancy at ${formatPct(icu)} (${f.latestICU}/${f.icuMax}). Nearing capacity.`,
-        time: DATA.lastUpdated,
-        tz: f.timezone
-      });
+    function toggleAlertRule(id) {
+      const rule = appState.alertRules.find(r => r.id === id);
+      if (rule) rule.enabled = !rule.enabled;
+      renderAlerts();
     }
 
-    // Forecast alerts
-    const fKey = id + '_Total Census';
-    const forecasts = DATA.forecasts[fKey];
-    if (forecasts) {
-      const thresh95 = f.beds * 0.95;
-      for (const pt of forecasts) {
-        if (pt.value >= thresh95) {
+    function removeAlertRule(id) {
+      appState.alertRules = appState.alertRules.filter(r => r.id !== id);
+      renderAlertRules();
+      renderAlerts();
+      showToast('Alert rule removed');
+    }
+
+    function generateAlerts() {
+      const alerts = [];
+      const visibleIds = getVisibleFacilities();
+
+      visibleIds.forEach(id => {
+        const f = DATA.facilities[id];
+        const occ = computeOccPct(f);
+        const icu = computeIcuPct(f);
+
+        // Current state alerts
+        if (occ >= 95) {
           alerts.push({
-            id: 'fc_bed_' + id,
+            id: 'curr_bed_' + id,
             level: 'critical',
             facility: f.location,
-            message: `Projected to exceed 95% bed capacity by ${facilityDateTime(pt.timestamp, f.timezone)}.`,
-            time: pt.timestamp,
+            message: `Bed occupancy at ${formatPct(occ)} (${f.latestCensus}/${f.beds}). Immediate attention required.`,
+            time: DATA.lastUpdated,
             tz: f.timezone
           });
-          break;
-        }
-      }
-    }
-
-    const icuKey = id + '_ICU Occupancy';
-    const icuForecasts = DATA.forecasts[icuKey];
-    if (icuForecasts) {
-      const thresh95 = f.icuMax * 0.95;
-      for (const pt of icuForecasts) {
-        if (pt.value >= thresh95) {
+        } else if (occ >= 85) {
           alerts.push({
-            id: 'fc_icu_' + id,
+            id: 'curr_bed_' + id,
+            level: 'warning',
+            facility: f.location,
+            message: `Bed occupancy at ${formatPct(occ)} (${f.latestCensus}/${f.beds}). Approaching capacity.`,
+            time: DATA.lastUpdated,
+            tz: f.timezone
+          });
+        }
+
+        if (icu >= 95) {
+          alerts.push({
+            id: 'curr_icu_' + id,
             level: 'critical',
             facility: f.location,
-            message: `ICU projected to exceed 95% capacity by ${facilityDateTime(pt.timestamp, f.timezone)}.`,
-            time: pt.timestamp,
+            message: `ICU occupancy at ${formatPct(icu)} (${f.latestICU}/${f.icuMax}). Critical threshold exceeded.`,
+            time: DATA.lastUpdated,
             tz: f.timezone
           });
-          break;
+        } else if (icu >= 85) {
+          alerts.push({
+            id: 'curr_icu_' + id,
+            level: 'warning',
+            facility: f.location,
+            message: `ICU occupancy at ${formatPct(icu)} (${f.latestICU}/${f.icuMax}). Nearing capacity.`,
+            time: DATA.lastUpdated,
+            tz: f.timezone
+          });
         }
-      }
+
+        // Forecast alerts
+        const fKey = id + '_Total Census';
+        const forecasts = DATA.forecasts[fKey];
+        if (forecasts) {
+          const thresh95 = f.beds * 0.95;
+          for (const pt of forecasts) {
+            if (pt.value >= thresh95) {
+              alerts.push({
+                id: 'fc_bed_' + id,
+                level: 'critical',
+                facility: f.location,
+                message: `Projected to exceed 95% bed capacity by ${facilityDateTime(pt.timestamp, f.timezone)}.`,
+                time: pt.timestamp,
+                tz: f.timezone
+              });
+              break;
+            }
+          }
+        }
+
+        const icuKey = id + '_ICU Occupancy';
+        const icuForecasts = DATA.forecasts[icuKey];
+        if (icuForecasts) {
+          const thresh95 = f.icuMax * 0.95;
+          for (const pt of icuForecasts) {
+            if (pt.value >= thresh95) {
+              alerts.push({
+                id: 'fc_icu_' + id,
+                level: 'critical',
+                facility: f.location,
+                message: `ICU projected to exceed 95% capacity by ${facilityDateTime(pt.timestamp, f.timezone)}.`,
+                time: pt.timestamp,
+                tz: f.timezone
+              });
+              break;
+            }
+          }
+        }
+      });
+
+      // Sort by level (critical first) then time
+      alerts.sort((a, b) => {
+        if (a.level === 'critical' && b.level !== 'critical') return -1;
+        if (a.level !== 'critical' && b.level === 'critical') return 1;
+        return new Date(b.time) - new Date(a.time);
+      });
+
+      return alerts;
     }
-  });
 
-  // Sort by level (critical first) then time
-  alerts.sort((a, b) => {
-    if (a.level === 'critical' && b.level !== 'critical') return -1;
-    if (a.level !== 'critical' && b.level === 'critical') return 1;
-    return new Date(b.time) - new Date(a.time);
-  });
+    function renderAlerts() {
+      const alerts = generateAlerts();
+      const container = document.getElementById('alertsFeed');
 
-  return alerts;
-}
-
-function renderAlerts() {
-  const alerts = generateAlerts();
-  const container = document.getElementById('alertsFeed');
-
-  if (alerts.length === 0) {
-    container.innerHTML = `
+      if (alerts.length === 0) {
+        container.innerHTML = `
       <div style="text-align:center;padding:var(--space-8);color:var(--color-text-muted);">
         <i data-lucide="check-circle" style="width:40px;height:40px;margin:0 auto var(--space-3);display:block;color:var(--green);"></i>
         <p style="font-size:var(--text-sm);font-weight:500;">All clear</p>
         <p style="font-size:var(--text-xs);">No active alerts at this time.</p>
       </div>`;
-    lucide.createIcons();
-    return;
-  }
+        lucide.createIcons();
+        return;
+      }
 
-  container.innerHTML = alerts.map(a => {
-    const snoozed = appState.snoozedAlerts.has(a.id);
-    return `
+      container.innerHTML = alerts.map(a => {
+        const snoozed = appState.snoozedAlerts.has(a.id);
+        return `
       <div class="alert-item ${snoozed ? 'snoozed' : ''}">
         <div class="alert-icon ${a.level}">
           <i data-lucide="${a.level === 'critical' ? 'alert-octagon' : 'alert-triangle'}"></i>
@@ -2581,265 +3002,265 @@ function renderAlerts() {
           </button>
         </div>
       </div>`;
-  }).join('');
-  lucide.createIcons();
-}
+      }).join('');
+      lucide.createIcons();
+    }
 
-function snoozeAlert(id) {
-  if (appState.snoozedAlerts.has(id)) {
-    appState.snoozedAlerts.delete(id);
-  } else {
-    appState.snoozedAlerts.add(id);
-  }
-  renderAlerts();
-}
+    function snoozeAlert(id) {
+      if (appState.snoozedAlerts.has(id)) {
+        appState.snoozedAlerts.delete(id);
+      } else {
+        appState.snoozedAlerts.add(id);
+      }
+      renderAlerts();
+    }
 
-/* ============================================
-   SETTINGS FUNCTIONS
-   ============================================ */
-function switchActiveRole(roleName) {
-  if (!appState.roles[roleName]) return;
-  appState.activeRole = roleName;
-  const visibleIds = getVisibleFacilities();
-  const desc = document.getElementById('visibleFacilitiesDesc');
-  if (desc) desc.textContent = 'Showing ' + visibleIds.length + ' of ' + Object.keys(DATA.facilities).length + ' facilities';
-  document.getElementById('roleBadge').textContent = roleName;
-  renderOverview();
-  renderFacilitySelector();
-  renderAlertConfig();
-  if (appState.selectedFacility && !visibleIds.includes(appState.selectedFacility)) {
-    appState.selectedFacility = visibleIds[0];
-  }
-  if (appState.currentTab === 'facilities' && appState.selectedFacility) {
-    selectFacility(appState.selectedFacility);
-  }
-}
+    /* ============================================
+       SETTINGS FUNCTIONS
+       ============================================ */
+    function switchActiveRole(roleName) {
+      if (!appState.roles[roleName]) return;
+      appState.activeRole = roleName;
+      const visibleIds = getVisibleFacilities();
+      const desc = document.getElementById('visibleFacilitiesDesc');
+      if (desc) desc.textContent = 'Showing ' + visibleIds.length + ' of ' + Object.keys(DATA.facilities).length + ' facilities';
+      document.getElementById('roleBadge').textContent = roleName;
+      renderOverview();
+      renderFacilitySelector();
+      renderAlertConfig();
+      if (appState.selectedFacility && !visibleIds.includes(appState.selectedFacility)) {
+        appState.selectedFacility = visibleIds[0];
+      }
+      if (appState.currentTab === 'facilities' && appState.selectedFacility) {
+        selectFacility(appState.selectedFacility);
+      }
+    }
 
-function addNewRole() {
-  var count = Object.keys(appState.roles).length + 1;
-  var name = 'Custom Role ' + count;
-  while (appState.roles[name]) { count++; name = 'Custom Role ' + count; }
-  var allIds = Object.keys(DATA.facilities);
-  appState.roles[name] = {
-    facilities: allIds.slice(),
-    metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
-    kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
-  };
-  renderRoleConfig();
-  populateRoleDropdown();
-}
+    function addNewRole() {
+      var count = Object.keys(appState.roles).length + 1;
+      var name = 'Custom Role ' + count;
+      while (appState.roles[name]) { count++; name = 'Custom Role ' + count; }
+      var allIds = Object.keys(DATA.facilities);
+      appState.roles[name] = {
+        facilities: allIds.slice(),
+        metrics: ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'],
+        kpis: ['census', 'bedUtil', 'icuUtil', 'admissions', 'discharges']
+      };
+      renderRoleConfig();
+      populateRoleDropdown();
+    }
 
-function deleteRole(name) {
-  if (Object.keys(appState.roles).length <= 1) { showToast('Must keep at least one role'); return; }
-  delete appState.roles[name];
-  if (appState.activeRole === name) {
-    appState.activeRole = Object.keys(appState.roles)[0];
-    switchActiveRole(appState.activeRole);
-  }
-  renderRoleConfig();
-  populateRoleDropdown();
-}
+    function deleteRole(name) {
+      if (Object.keys(appState.roles).length <= 1) { showToast('Must keep at least one role'); return; }
+      delete appState.roles[name];
+      if (appState.activeRole === name) {
+        appState.activeRole = Object.keys(appState.roles)[0];
+        switchActiveRole(appState.activeRole);
+      }
+      renderRoleConfig();
+      populateRoleDropdown();
+    }
 
-function toggleRoleCard(name) {
-  var cards = document.querySelectorAll('.role-card');
-  cards.forEach(function(c) {
-    if (c.dataset.role === name) c.classList.toggle('open');
-    else c.classList.remove('open');
-  });
-}
+    function toggleRoleCard(name) {
+      var cards = document.querySelectorAll('.role-card');
+      cards.forEach(function (c) {
+        if (c.dataset.role === name) c.classList.toggle('open');
+        else c.classList.remove('open');
+      });
+    }
 
-function saveRoleConfig(name) {
-  var role = appState.roles[name];
-  if (!role) return;
-  var card = document.querySelector('.role-card[data-role="' + name + '"]');
-  if (!card) return;
+    function saveRoleConfig(name) {
+      var role = appState.roles[name];
+      if (!role) return;
+      var card = document.querySelector('.role-card[data-role="' + name + '"]');
+      if (!card) return;
 
-  // Read name input
-  var nameInput = card.querySelector('.role-name-input');
-  var newName = nameInput ? nameInput.value.trim() : name;
-  if (newName && newName !== name) {
-    if (appState.roles[newName]) { showToast('Role name already exists'); return; }
-    appState.roles[newName] = role;
-    delete appState.roles[name];
-    if (appState.activeRole === name) appState.activeRole = newName;
-    name = newName;
-  }
+      // Read name input
+      var nameInput = card.querySelector('.role-name-input');
+      var newName = nameInput ? nameInput.value.trim() : name;
+      if (newName && newName !== name) {
+        if (appState.roles[newName]) { showToast('Role name already exists'); return; }
+        appState.roles[newName] = role;
+        delete appState.roles[name];
+        if (appState.activeRole === name) appState.activeRole = newName;
+        name = newName;
+      }
 
-  // Read facilities
-  var facChecks = card.querySelectorAll('input[data-group="fac"]');
-  var selFacs = [];
-  facChecks.forEach(function(cb) { if (cb.checked) selFacs.push(cb.value); });
-  role.facilities = selFacs.length === Object.keys(DATA.facilities).length ? '__all__' : selFacs;
+      // Read facilities
+      var facChecks = card.querySelectorAll('input[data-group="fac"]');
+      var selFacs = [];
+      facChecks.forEach(function (cb) { if (cb.checked) selFacs.push(cb.value); });
+      role.facilities = selFacs.length === Object.keys(DATA.facilities).length ? '__all__' : selFacs;
 
-  // Read metrics
-  var metChecks = card.querySelectorAll('input[data-group="met"]');
-  var selMets = [];
-  metChecks.forEach(function(cb) { if (cb.checked) selMets.push(cb.value); });
-  role.metrics = selMets;
+      // Read metrics
+      var metChecks = card.querySelectorAll('input[data-group="met"]');
+      var selMets = [];
+      metChecks.forEach(function (cb) { if (cb.checked) selMets.push(cb.value); });
+      role.metrics = selMets;
 
-  // Read KPIs
-  var kpiChecks = card.querySelectorAll('input[data-group="kpi"]');
-  var selKpis = [];
-  kpiChecks.forEach(function(cb) { if (cb.checked) selKpis.push(cb.value); });
-  role.kpis = selKpis;
+      // Read KPIs
+      var kpiChecks = card.querySelectorAll('input[data-group="kpi"]');
+      var selKpis = [];
+      kpiChecks.forEach(function (cb) { if (cb.checked) selKpis.push(cb.value); });
+      role.kpis = selKpis;
 
-  showToast('Role "' + name + '" saved');
-  renderRoleConfig();
-  populateRoleDropdown();
-  if (name === appState.activeRole) switchActiveRole(name);
-}
+      showToast('Role "' + name + '" saved');
+      renderRoleConfig();
+      populateRoleDropdown();
+      if (name === appState.activeRole) switchActiveRole(name);
+    }
 
-function populateRoleDropdown() {
-  var dd = document.getElementById('settingsActiveRole');
-  if (!dd) return;
-  dd.innerHTML = Object.keys(appState.roles).map(function(r) {
-    return '<option value="' + r + '"' + (r === appState.activeRole ? ' selected' : '') + '>' + r + '</option>';
-  }).join('');
-}
+    function populateRoleDropdown() {
+      var dd = document.getElementById('settingsActiveRole');
+      if (!dd) return;
+      dd.innerHTML = Object.keys(appState.roles).map(function (r) {
+        return '<option value="' + r + '"' + (r === appState.activeRole ? ' selected' : '') + '>' + r + '</option>';
+      }).join('');
+    }
 
-function renderRoleConfig() {
-  var container = document.getElementById('roleConfigList');
-  if (!container) return;
-  var allIds = Object.keys(DATA.facilities);
-  var allMetrics = ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
-  var allKpis = [
-    { id: 'census', label: 'Total Census' },
-    { id: 'bedUtil', label: 'Bed Utilization' },
-    { id: 'icuUtil', label: 'ICU Utilization' },
-    { id: 'admissions', label: 'Admissions' },
-    { id: 'discharges', label: 'Discharges' }
-  ];
+    function renderRoleConfig() {
+      var container = document.getElementById('roleConfigList');
+      if (!container) return;
+      var allIds = Object.keys(DATA.facilities);
+      var allMetrics = ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
+      var allKpis = [
+        { id: 'census', label: 'Total Census' },
+        { id: 'bedUtil', label: 'Bed Utilization' },
+        { id: 'icuUtil', label: 'ICU Utilization' },
+        { id: 'admissions', label: 'Admissions' },
+        { id: 'discharges', label: 'Discharges' }
+      ];
 
-  var html = '';
-  Object.keys(appState.roles).forEach(function(roleName) {
-    var role = appState.roles[roleName];
-    var isActive = roleName === appState.activeRole;
-    var facList = role.facilities === '__all__' ? allIds : (role.facilities || []);
+      var html = '';
+      Object.keys(appState.roles).forEach(function (roleName) {
+        var role = appState.roles[roleName];
+        var isActive = roleName === appState.activeRole;
+        var facList = role.facilities === '__all__' ? allIds : (role.facilities || []);
 
-    html += '<div class="role-card" data-role="' + roleName + '">';
-    html += '<div class="role-card-head" onclick="toggleRoleCard(\'' + roleName.replace(/'/g, "\\'") + '\')">';
-    html += '<span class="role-name">' + roleName + '</span>';
-    if (isActive) html += '<span class="role-badge-sm">Active</span>';
-    html += '<span style="font-size:var(--text-xs);color:var(--color-text-muted);">' + facList.length + ' facilities, ' + (role.metrics ? role.metrics.length : 5) + ' metrics</span>';
-    html += '<i data-lucide="chevron-down" class="role-chevron"></i>';
-    html += '</div>';
+        html += '<div class="role-card" data-role="' + roleName + '">';
+        html += '<div class="role-card-head" onclick="toggleRoleCard(\'' + roleName.replace(/'/g, "\\'") + '\')">';
+        html += '<span class="role-name">' + roleName + '</span>';
+        if (isActive) html += '<span class="role-badge-sm">Active</span>';
+        html += '<span style="font-size:var(--text-xs);color:var(--color-text-muted);">' + facList.length + ' facilities, ' + (role.metrics ? role.metrics.length : 5) + ' metrics</span>';
+        html += '<i data-lucide="chevron-down" class="role-chevron"></i>';
+        html += '</div>';
 
-    html += '<div class="role-card-body">';
+        html += '<div class="role-card-body">';
 
-    // Role name edit
-    html += '<div class="role-field">';
-    html += '<div class="role-field-label">Role Name</div>';
-    html += '<input type="text" class="role-name-input" value="' + roleName + '">';
-    html += '</div>';
+        // Role name edit
+        html += '<div class="role-field">';
+        html += '<div class="role-field-label">Role Name</div>';
+        html += '<input type="text" class="role-name-input" value="' + roleName + '">';
+        html += '</div>';
 
-    // Facilities checkboxes
-    html += '<div class="role-field">';
-    html += '<div class="role-field-label">Facilities</div>';
-    html += '<div class="role-check-grid">';
-    allIds.forEach(function(fid) {
-      var checked = facList.includes(fid) ? ' checked' : '';
-      html += '<label><input type="checkbox" data-group="fac" value="' + fid + '"' + checked + '> ' + DATA.facilities[fid].location + '</label>';
-    });
-    html += '</div></div>';
+        // Facilities checkboxes
+        html += '<div class="role-field">';
+        html += '<div class="role-field-label">Facilities</div>';
+        html += '<div class="role-check-grid">';
+        allIds.forEach(function (fid) {
+          var checked = facList.includes(fid) ? ' checked' : '';
+          html += '<label><input type="checkbox" data-group="fac" value="' + fid + '"' + checked + '> ' + DATA.facilities[fid].location + '</label>';
+        });
+        html += '</div></div>';
 
-    // Metrics checkboxes
-    html += '<div class="role-field">';
-    html += '<div class="role-field-label">Chart Metrics</div>';
-    html += '<div class="role-check-grid">';
-    allMetrics.forEach(function(m) {
-      var checked = (role.metrics || allMetrics).includes(m) ? ' checked' : '';
-      html += '<label><input type="checkbox" data-group="met" value="' + m + '"' + checked + '> ' + m + '</label>';
-    });
-    html += '</div></div>';
+        // Metrics checkboxes
+        html += '<div class="role-field">';
+        html += '<div class="role-field-label">Chart Metrics</div>';
+        html += '<div class="role-check-grid">';
+        allMetrics.forEach(function (m) {
+          var checked = (role.metrics || allMetrics).includes(m) ? ' checked' : '';
+          html += '<label><input type="checkbox" data-group="met" value="' + m + '"' + checked + '> ' + m + '</label>';
+        });
+        html += '</div></div>';
 
-    // KPI checkboxes
-    html += '<div class="role-field">';
-    html += '<div class="role-field-label">Overview KPI Cards</div>';
-    html += '<div class="role-check-grid">';
-    allKpis.forEach(function(k) {
-      var checked = (role.kpis || allKpis.map(function(x){return x.id;})).includes(k.id) ? ' checked' : '';
-      html += '<label><input type="checkbox" data-group="kpi" value="' + k.id + '"' + checked + '> ' + k.label + '</label>';
-    });
-    html += '</div></div>';
+        // KPI checkboxes
+        html += '<div class="role-field">';
+        html += '<div class="role-field-label">Overview KPI Cards</div>';
+        html += '<div class="role-check-grid">';
+        allKpis.forEach(function (k) {
+          var checked = (role.kpis || allKpis.map(function (x) { return x.id; })).includes(k.id) ? ' checked' : '';
+          html += '<label><input type="checkbox" data-group="kpi" value="' + k.id + '"' + checked + '> ' + k.label + '</label>';
+        });
+        html += '</div></div>';
 
-    // Actions
-    html += '<div class="role-actions">';
-    html += '<button class="btn btn-primary btn-sm" onclick="saveRoleConfig(\'' + roleName.replace(/'/g, "\\'") + '\')">Save</button>';
-    html += '<button class="btn btn-secondary btn-sm" style="color:var(--red);" onclick="deleteRole(\'' + roleName.replace(/'/g, "\\'") + '\')">Delete</button>';
-    html += '</div>';
+        // Actions
+        html += '<div class="role-actions">';
+        html += '<button class="btn btn-primary btn-sm" onclick="saveRoleConfig(\'' + roleName.replace(/'/g, "\\'") + '\')">Save</button>';
+        html += '<button class="btn btn-secondary btn-sm" style="color:var(--red);" onclick="deleteRole(\'' + roleName.replace(/'/g, "\\'") + '\')">Delete</button>';
+        html += '</div>';
 
-    html += '</div></div>';
-  });
+        html += '</div></div>';
+      });
 
-  container.innerHTML = html;
-  lucide.createIcons();
-}
+      container.innerHTML = html;
+      lucide.createIcons();
+    }
 
-function copyShareLink() {
-  const params = new URLSearchParams();
-  params.set('tab', appState.currentTab);
-  if (appState.selectedFacility) params.set('fac', appState.selectedFacility);
-  params.set('metric', appState.selectedMetric);
-  params.set('range', appState.chartRange);
-  params.set('role', appState.role);
-  const url = window.location.origin + window.location.pathname + '#' + params.toString();
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(() => showToast('Link copied')).catch(() => showToast('Copy failed'));
-  } else {
-    showToast('Share: ' + url);
-  }
-}
+    function copyShareLink() {
+      const params = new URLSearchParams();
+      params.set('tab', appState.currentTab);
+      if (appState.selectedFacility) params.set('fac', appState.selectedFacility);
+      params.set('metric', appState.selectedMetric);
+      params.set('range', appState.chartRange);
+      params.set('role', appState.role);
+      const url = window.location.origin + window.location.pathname + '#' + params.toString();
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => showToast('Link copied')).catch(() => showToast('Copy failed'));
+      } else {
+        showToast('Share: ' + url);
+      }
+    }
 
-function exportPDF() {
-  showToast('Generating PDF...');
-  const target = document.getElementById('tab-' + appState.currentTab);
-  html2canvas(target, { scale: 2, backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--color-bg') }).then(canvas => {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgWidth = 210;
-    const imgHeight = canvas.height * imgWidth / canvas.width;
-    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
-    const blob = pdf.output('blob');
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'hca-census-snapshot.pdf';
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('PDF downloaded');
-  }).catch(() => showToast('PDF export failed'));
-}
+    function exportPDF() {
+      showToast('Generating PDF...');
+      const target = document.getElementById('tab-' + appState.currentTab);
+      html2canvas(target, { scale: 2, backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--color-bg') }).then(canvas => {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+        const blob = pdf.output('blob');
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'hca-census-snapshot.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('PDF downloaded');
+      }).catch(() => showToast('PDF export failed'));
+    }
 
-function exportCSV() {
-  const visibleIds = getVisibleFacilities();
-  let csv = 'Facility ID,Location,Beds,Census,Occupancy %,ICU,ICU Max,ICU %,Admissions,Discharges,Births,Census 24h Delta,ICU 24h Delta\n';
-  visibleIds.forEach(id => {
-    const f = DATA.facilities[id];
-    csv += `${f.id},"${f.location}",${f.beds},${f.latestCensus},${computeOccPct(f).toFixed(1)},${f.latestICU},${f.icuMax},${computeIcuPct(f).toFixed(1)},${f.latestAdmissions},${f.latestDischarges},${f.latestBirths},${f.censusDelta24h || 0},${f.icuDelta24h || 0}\n`;
-  });
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'hca-census-data.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('CSV downloaded');
-}
+    function exportCSV() {
+      const visibleIds = getVisibleFacilities();
+      let csv = 'Facility ID,Location,Beds,Census,Occupancy %,ICU,ICU Max,ICU %,Admissions,Discharges,Births,Census 24h Delta,ICU 24h Delta\n';
+      visibleIds.forEach(id => {
+        const f = DATA.facilities[id];
+        csv += `${f.id},"${f.location}",${f.beds},${f.latestCensus},${computeOccPct(f).toFixed(1)},${f.latestICU},${f.icuMax},${computeIcuPct(f).toFixed(1)},${f.latestAdmissions},${f.latestDischarges},${f.latestBirths},${f.censusDelta24h || 0},${f.icuDelta24h || 0}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'hca-census-data.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('CSV downloaded');
+    }
 
-function renderModelPerfTable() {
-  const body = document.getElementById('modelPerfBody');
-  const rows = [];
-  const visibleIds = getVisibleFacilities();
-  const metrics = ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
+    function renderModelPerfTable() {
+      const body = document.getElementById('modelPerfBody');
+      const rows = [];
+      const visibleIds = getVisibleFacilities();
+      const metrics = ['Total Census', 'ICU Occupancy', 'Admissions', 'Discharges', 'Births'];
 
-  visibleIds.forEach(id => {
-    const f = DATA.facilities[id];
-    metrics.forEach(m => {
-      const key = id + '_' + m;
-      const info = DATA.modelMetrics[key];
-      if (info) {
-        rows.push(`<tr>
+      visibleIds.forEach(id => {
+        const f = DATA.facilities[id];
+        metrics.forEach(m => {
+          const key = id + '_' + m;
+          const info = DATA.modelMetrics[key];
+          if (info) {
+            rows.push(`<tr>
           <td>${f.location}</td>
           <td>${m}</td>
           <td>${info.mae.toFixed(2)}</td>
@@ -2847,110 +3268,111 @@ function renderModelPerfTable() {
           <td>${info.trainSize}</td>
           <td>${info.testSize}</td>
         </tr>`);
+          }
+        });
+      });
+      body.innerHTML = rows.join('');
+    }
+
+    /* ============================================
+       INITIALIZATION
+       ============================================ */
+    function parseHashParams() {
+      const hash = window.location.hash.slice(1);
+      if (!hash) return;
+      const params = new URLSearchParams(hash);
+      if (params.has('tab')) appState.currentTab = params.get('tab');
+      if (params.has('fac')) appState.selectedFacility = params.get('fac');
+      if (params.has('metric')) appState.selectedMetric = params.get('metric');
+      if (params.has('range')) appState.chartRange = params.get('range');
+      if (params.has('role')) appState.role = params.get('role');
+    }
+
+    async function init() {
+      initTheme();
+
+      try {
+        const [r1, r2, r3] = await Promise.all([
+          fetch('./data-facilities.json'),
+          fetch('./data-charts.json'),
+          fetch('./data-forecasts.json')
+        ]);
+        const [d1, d2, d3] = await Promise.all([r1.json(), r2.json(), r3.json()]);
+        DATA = { ...d1, ...d2, ...d3 };
+      } catch (e) {
+        document.getElementById('loadingScreen').innerHTML = '<p style="color:#f85149;">Failed to load data. Please refresh.</p>';
+        return;
       }
-    });
-  });
-  body.innerHTML = rows.join('');
-}
 
-/* ============================================
-   INITIALIZATION
-   ============================================ */
-function parseHashParams() {
-  const hash = window.location.hash.slice(1);
-  if (!hash) return;
-  const params = new URLSearchParams(hash);
-  if (params.has('tab')) appState.currentTab = params.get('tab');
-  if (params.has('fac')) appState.selectedFacility = params.get('fac');
-  if (params.has('metric')) appState.selectedMetric = params.get('metric');
-  if (params.has('range')) appState.chartRange = params.get('range');
-  if (params.has('role')) appState.role = params.get('role');
-}
+      // Assign divisions
+      const allIds = Object.keys(DATA.facilities);
+      appState.divisions['Division A'] = allIds.slice(0, 4);
+      appState.divisions['Division B'] = allIds.slice(4, 7);
+      appState.divisions['Division C'] = allIds.slice(7);
 
-async function init() {
-  initTheme();
+      // Set default facility assignments for built-in roles
+      if (appState.roles['Division VP'].facilities.length === 0) {
+        appState.roles['Division VP'].facilities = allIds.slice(0, 4);
+      }
+      if (appState.roles['Hospital Admin'].facilities.length === 0) {
+        appState.roles['Hospital Admin'].facilities = [allIds[0]];
+      }
 
-  try {
-    const [r1, r2, r3] = await Promise.all([
-      fetch('./data-facilities.json'),
-      fetch('./data-charts.json'),
-      fetch('./data-forecasts.json')
-    ]);
-    const [d1, d2, d3] = await Promise.all([r1.json(), r2.json(), r3.json()]);
-    DATA = { ...d1, ...d2, ...d3 };
-  } catch (e) {
-    document.getElementById('loadingScreen').innerHTML = '<p style="color:#f85149;">Failed to load data. Please refresh.</p>';
-    return;
-  }
+      // Set default selected facility
+      if (!appState.selectedFacility) appState.selectedFacility = allIds[0];
 
-  // Assign divisions
-  const allIds = Object.keys(DATA.facilities);
-  appState.divisions['Division A'] = allIds.slice(0, 4);
-  appState.divisions['Division B'] = allIds.slice(4, 7);
-  appState.divisions['Division C'] = allIds.slice(7);
+      parseHashParams();
 
-  // Set default facility assignments for built-in roles
-  if (appState.roles['Division VP'].facilities.length === 0) {
-    appState.roles['Division VP'].facilities = allIds.slice(0, 4);
-  }
-  if (appState.roles['Hospital Admin'].facilities.length === 0) {
-    appState.roles['Hospital Admin'].facilities = [allIds[0]];
-  }
+      // Compute missing percentages
+      Object.values(DATA.facilities).forEach(f => {
+        if (f.occupancyPct === undefined) f.occupancyPct = f.beds > 0 ? parseFloat((f.latestCensus / f.beds * 100).toFixed(1)) : 0;
+        if (f.icuPct === undefined) f.icuPct = f.icuMax > 0 ? parseFloat((f.latestICU / f.icuMax * 100).toFixed(1)) : 0;
+        if (f.censusDelta24h === undefined) f.censusDelta24h = 0;
+        if (f.icuDelta24h === undefined) f.icuDelta24h = 0;
+      });
 
-  // Set default selected facility
-  if (!appState.selectedFacility) appState.selectedFacility = allIds[0];
+      // Render last updated
+      const lu = DATA.lastUpdated;
+      document.getElementById('lastUpdated').textContent = 'Updated ' + new Intl.DateTimeFormat('en-US', {
+        month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+      }).format(new Date(lu));
 
-  parseHashParams();
+      // Dark mode checkbox sync
+      document.getElementById('settingsDarkMode').checked = appState.theme === 'dark';
 
-  // Compute missing percentages
-  Object.values(DATA.facilities).forEach(f => {
-    if (f.occupancyPct === undefined) f.occupancyPct = f.beds > 0 ? parseFloat((f.latestCensus / f.beds * 100).toFixed(1)) : 0;
-    if (f.icuPct === undefined) f.icuPct = f.icuMax > 0 ? parseFloat((f.latestICU / f.icuMax * 100).toFixed(1)) : 0;
-    if (f.censusDelta24h === undefined) f.censusDelta24h = 0;
-    if (f.icuDelta24h === undefined) f.icuDelta24h = 0;
-  });
+      // Render everything
+      renderOverview();
+      renderFacilitySelector();
+      renderAlertConfig();
+      renderAlertRules();
+      renderAlerts();
+      renderModelPerfTable();
 
-  // Render last updated
-  const lu = DATA.lastUpdated;
-  document.getElementById('lastUpdated').textContent = 'Updated ' + new Intl.DateTimeFormat('en-US', {
-    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
-  }).format(new Date(lu));
+      // Default facility detail
+      if (appState.selectedFacility) {
+        renderFacilityDetail(appState.selectedFacility);
+      }
 
-  // Dark mode checkbox sync
-  document.getElementById('settingsDarkMode').checked = appState.theme === 'dark';
+      // Switch to correct tab
+      switchTab(appState.currentTab);
 
-  // Render everything
-  renderOverview();
-  renderFacilitySelector();
-  renderAlertConfig();
-  renderAlertRules();
-  renderAlerts();
-  renderModelPerfTable();
+      // Populate role dropdown & render role config
+      populateRoleDropdown();
+      renderRoleConfig();
 
-  // Default facility detail
-  if (appState.selectedFacility) {
-    renderFacilityDetail(appState.selectedFacility);
-  }
+      // Show app, hide loader
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
 
-  // Switch to correct tab
-  switchTab(appState.currentTab);
+      // Initialize Lucide icons
+      lucide.createIcons();
 
-  // Populate role dropdown & render role config
-  populateRoleDropdown();
-  renderRoleConfig();
+      // Role badge
+      document.getElementById('roleBadge').textContent = appState.activeRole;
+    }
 
-  // Show app, hide loader
-  document.getElementById('loadingScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-
-  // Initialize Lucide icons
-  lucide.createIcons();
-
-  // Role badge
-  document.getElementById('roleBadge').textContent = appState.activeRole;
-}
-
-init();
-</script>
+    init();
+  </script>
 </body>
+
 </html>
