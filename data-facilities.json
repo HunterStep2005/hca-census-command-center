@@ -168,304 +168,304 @@
     },
     "modelMetrics": {
         "1234_Admissions": {
-            "mae": 2.23,
-            "mape": 4.05,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.34,
+            "mape": 2.11,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "1234_Births": {
-            "mae": 0.72,
-            "mape": 12.48,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.28,
+            "mape": 3.97,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "1234_Discharges": {
-            "mae": 1.29,
-            "mape": 2.44,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 2.57,
+            "mape": 3.37,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "1234_ICU Occupancy": {
-            "mae": 0.88,
-            "mape": 2.51,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.58,
+            "mape": 1.63,
+            "trainSize": 2659,
+            "testSize": 217
         },
         "1234_Total Census": {
-            "mae": 4.3,
-            "mape": 1.08,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 6.12,
+            "mape": 1.6,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "12345_Admissions": {
-            "mae": 6.24,
-            "mape": 55.4,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 2.64,
+            "mape": 3.32,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "12345_Births": {
-            "mae": 1.12,
-            "mape": 70.96,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.3,
+            "mape": 4.55,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "12345_Discharges": {
-            "mae": 6.26,
-            "mape": 159.52,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 3.25,
+            "mape": 3.59,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "12345_ICU Occupancy": {
-            "mae": 1.9,
-            "mape": 2.61,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.16,
+            "mape": 1.67,
+            "trainSize": 2659,
+            "testSize": 217
         },
         "12345_Total Census": {
-            "mae": 5.5,
-            "mape": 1.2,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 7.25,
+            "mape": 1.6,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "23456_Admissions": {
-            "mae": 6.74,
-            "mape": 29.02,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 2.22,
+            "mape": 1.97,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "23456_Births": {
-            "mae": 2.18,
-            "mape": 93.14,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.25,
+            "mape": 5.1,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "23456_Discharges": {
-            "mae": 7.53,
-            "mape": 495.54,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 5.71,
+            "mape": 4.05,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "23456_ICU Occupancy": {
-            "mae": 6.04,
-            "mape": 5.35,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.79,
+            "mape": 1.57,
+            "trainSize": 2660,
+            "testSize": 217
         },
         "23456_Total Census": {
-            "mae": 11.45,
-            "mape": 1.43,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 11.69,
+            "mape": 1.51,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "34567_Admissions": {
-            "mae": 1.75,
-            "mape": 36.85,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.08,
+            "mape": 2.78,
+            "trainSize": 1674,
+            "testSize": 145
         },
         "34567_Births": {
             "mae": 0.0,
             "mape": 0.0,
-            "trainSize": 312,
-            "testSize": 24
+            "trainSize": 1674,
+            "testSize": 145
         },
         "34567_Discharges": {
-            "mae": 3.48,
-            "mape": 66.75,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.06,
+            "mape": 2.52,
+            "trainSize": 1674,
+            "testSize": 145
         },
         "34567_ICU Occupancy": {
-            "mae": 1.48,
-            "mape": 6.9,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.31,
+            "mape": 1.55,
+            "trainSize": 2660,
+            "testSize": 217
         },
         "34567_Total Census": {
-            "mae": 8.06,
-            "mape": 4.92,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 2.72,
+            "mape": 1.61,
+            "trainSize": 1674,
+            "testSize": 145
         },
         "45678_Admissions": {
-            "mae": 4.94,
-            "mape": 119.24,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.09,
+            "mape": 4.21,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "45678_Births": {
-            "mae": 1.26,
-            "mape": 109.05,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.14,
+            "mape": 2.8,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "45678_Discharges": {
-            "mae": 4.07,
-            "mape": 127.63,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.41,
+            "mape": 4.63,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "45678_ICU Occupancy": {
-            "mae": 0.54,
-            "mape": 8.05,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.12,
+            "mape": 1.77,
+            "trainSize": 2659,
+            "testSize": 217
         },
         "45678_Total Census": {
-            "mae": 3.5,
-            "mape": 3.16,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.92,
+            "mape": 1.61,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "56789_Admissions": {
-            "mae": 3.48,
-            "mape": 4.28,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.81,
+            "mape": 0.98,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "56789_Births": {
-            "mae": 0.79,
-            "mape": 14.96,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.35,
+            "mape": 5.23,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "56789_Discharges": {
-            "mae": 3.92,
-            "mape": 5.54,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.14,
+            "mape": 1.28,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "56789_ICU Occupancy": {
-            "mae": 1.54,
-            "mape": 2.63,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.94,
+            "mape": 1.62,
+            "trainSize": 2659,
+            "testSize": 217
         },
         "56789_Total Census": {
-            "mae": 5.68,
-            "mape": 1.19,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 7.33,
+            "mape": 1.6,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "67890_Admissions": {
-            "mae": 2.44,
-            "mape": 18.92,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 2.43,
+            "mape": 2.3,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "67890_Births": {
-            "mae": 0.45,
-            "mape": 41.28,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.19,
+            "mape": 4.17,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "67890_Discharges": {
-            "mae": 2.78,
-            "mape": 27.2,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 2.62,
+            "mape": 2.42,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "67890_ICU Occupancy": {
-            "mae": 1.35,
-            "mape": 19.61,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.9,
+            "mape": 1.63,
+            "trainSize": 2660,
+            "testSize": 217
         },
         "67890_Total Census": {
-            "mae": 7.87,
-            "mape": 5.41,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 10.32,
+            "mape": 1.55,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "78901_Admissions": {
-            "mae": 1.02,
-            "mape": 2.19,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.74,
+            "mape": 2.17,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "78901_Births": {
-            "mae": 1.94,
-            "mape": 14.05,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.2,
+            "mape": 3.02,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "78901_Discharges": {
-            "mae": 1.16,
-            "mape": 2.62,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 2.11,
+            "mape": 2.23,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "78901_ICU Occupancy": {
-            "mae": 1.23,
-            "mape": 2.14,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.91,
+            "mape": 1.48,
+            "trainSize": 2659,
+            "testSize": 217
         },
         "78901_Total Census": {
-            "mae": 5.77,
-            "mape": 1.2,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 6.98,
+            "mape": 1.49,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "89012_Admissions": {
-            "mae": 1.51,
-            "mape": 4.53,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.35,
+            "mape": 2.7,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "89012_Births": {
-            "mae": 1.01,
-            "mape": 57.81,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.22,
+            "mape": 2.8,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "89012_Discharges": {
-            "mae": 1.42,
-            "mape": 4.47,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.97,
+            "mape": 2.08,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "89012_ICU Occupancy": {
-            "mae": 0.77,
-            "mape": 3.3,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.22,
+            "mape": 1.68,
+            "trainSize": 2659,
+            "testSize": 217
         },
         "89012_Total Census": {
-            "mae": 4.25,
-            "mape": 1.64,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 3.75,
+            "mape": 1.7,
+            "trainSize": 3056,
+            "testSize": 274
         },
         "90123_Admissions": {
-            "mae": 2.01,
-            "mape": 4.33,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 1.37,
+            "mape": 2.58,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "90123_Births": {
-            "mae": 0.49,
-            "mape": 10.25,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.19,
+            "mape": 3.57,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "90123_Discharges": {
-            "mae": 1.51,
-            "mape": 3.44,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 2.03,
+            "mape": 3.11,
+            "trainSize": 3052,
+            "testSize": 274
         },
         "90123_ICU Occupancy": {
-            "mae": 0.91,
-            "mape": 3.08,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 0.64,
+            "mape": 1.45,
+            "trainSize": 2659,
+            "testSize": 217
         },
         "90123_Total Census": {
-            "mae": 4.08,
-            "mape": 1.2,
-            "trainSize": 312,
-            "testSize": 24
+            "mae": 5.07,
+            "mape": 1.57,
+            "trainSize": 3052,
+            "testSize": 274
         }
     }
 }
